@@ -3,6 +3,7 @@ package it.mikeslab.thebox.service;
 import it.mikeslab.thebox.entity.User;
 import it.mikeslab.thebox.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -13,10 +14,14 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Service
-@RequiredArgsConstructor
 public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
+
+    @Autowired
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     public User createUser(User user) {
         return userRepository.save(user);
@@ -25,7 +30,7 @@ public class UserService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        User user = userRepository.findByUsername(username);
+        User user = this.getUserByUsername(username);
 
         Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
 
@@ -37,8 +42,12 @@ public class UserService implements UserDetailsService {
 
     }
 
-    public User getUserByUsername(String username) {
-        return userRepository.findByUsername(username);
+    public User getUserByUsername(String username) throws UsernameNotFoundException {
+        User user = userRepository.findByUsername(username);
+        if (user == null) {
+            throw new UsernameNotFoundException("No user found for "+ username + ".");
+        }
+        return user;
     }
 
     public boolean deleteUser(String username) {
