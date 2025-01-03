@@ -29,9 +29,6 @@ public class SecurityConfig {
         this.userDetailsService = userDetailsService;
     }
 
-
-
-
     @Bean
     public AuthenticationManager customAuthenticationManager(HttpSecurity http) throws Exception {
         AuthenticationManagerBuilder builder =
@@ -50,13 +47,15 @@ public class SecurityConfig {
                 // Exclude static resources from security filters
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/static/**", "/js/**", "/images/**", "/components/**", "/css/**").permitAll() // Permit all access to static resources
-                        .requestMatchers("/", "/register", "/api/register").permitAll() // Permit access to home and register
+                        .requestMatchers("/", "/register", "/api/register").permitAll()
                         .anyRequest().authenticated() // All other requests require authentication
                 )
                 // Configure custom login page
                 .formLogin(form -> form
                         .loginPage("/login") // Custom login page
+                        .usernameParameter("email")
                         .loginProcessingUrl("/auth") // Endpoint for login form submission
+                        .defaultSuccessUrl("/courses", true) // Redirect to courses after successful login
                         .permitAll() // Allow everyone to access the login page and submission URL
                 )
                 // Configure logout behavior

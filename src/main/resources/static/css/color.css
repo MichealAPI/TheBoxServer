@@ -41,12 +41,28 @@
     border: 1px solid var(--red);
 }
 
+.bg-red {
+    background: var(--red);
+}
+
+.bg-green {
+    background: var(--green);
+}
+
 .secondary-color {
     color: rgba(var(--secondary));
 }
 
 .primary-color {
     color: var(--primary);
+}
+
+.red-color {
+    color: var(--red);
+}
+
+.green-color {
+    color: var(--green);
 }
 
 .animated.secondary-color:hover {

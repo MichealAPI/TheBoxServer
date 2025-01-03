@@ -14,32 +14,37 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" th:href="@{/css/courses.css}">
+    <link rel="stylesheet" th:href="@{/css/overview.css}">
 </head>
 
 <body>
-
-    <div id="sidebar" th:insert="fragments/sidebar :: #sidebar(userInitial=${userInitial}, firstName=${firstName}, lastName=${lastName}, username=${username})"></div>
+    
     <div id="navbar" th:insert="navbar"></div>
+    <div id="sidebar" th:insert="fragments/sidebar :: #sidebar(userInitial=${userInitial}, firstName=${firstName}, lastName=${lastName}, username=${username})"></div>
 
-    <div class="container-fluid min-vh-100 flex-grow-1 d-flex flex-column" style="height: 100%">
+    <div class="container-fluid">
 
-        <div class="row d-flex flex-grow-1">
+        <div class="row">
 
-            <div class="page-content-wrapper flex-grow-1">
-            <div class="col-md h-100">
+            <div class="page-content-wrapper min-vh-100">
+                            <div class="col-md h-100">
                 <div class="container-fluid h-100 d-flex flex-column">
                     <div class="row">
                         <div class="col-md-12">
-                            <div class="page-header d-flex align-items-center mt-4 mb-4 gap-4">
-                                <p class="phantom-bold mt-3 mb-3">
-                                    Your Courses
+                            <div class="d-flex align-items-center mt-4 mb-4 gap-4">
+
+                                <a th:href="@{/courses}" class="text-decoration-none secondary-color animated">
+                                    <i class="bi bi-arrow-left m-0 fs-4"></i>
+                                </a>
+
+                                <p class="phantom-bold m-0" th:text="${course.getTitle()}">
+                                    Your Class
                                 </p>
 
                                 <div class="d-none d-md-block general-btn">
                                     <button type="button" class="bg-primary rounded outline-transparent" data-bs-toggle="modal" data-bs-target="#courseModal">
                                         <div class="d-flex justify-content-between align-items-center p-1 pe-2 ps-2">
-                                            <p class="phantom-regular primary-color m-0 ps-2">Course</p>
+                                            <p class="phantom-regular primary-color m-0 ps-2">Idea</p>
                                             <i class="bi bi-plus m-0 fs-3 primary-color ps-1"></i>
                                         </div>
                                     </button>
@@ -51,62 +56,73 @@
                     <div class="row flex-grow-1">
                         <div class="col-md-12">
 
-                            <div class="empty" th:if="${courses.size() == 0}">
+                            <div class="empty" th:if="${ideas.size() == 0}">
 
                                 <div class="icon">
                                     <img draggable="false" th:src="@{/images/empty-icon.png}" alt="empty">
                                 </div>
 
                                 <div class="title">
-                                    <p class="phantom-regular secondary-color">No Courses Yet</p>
+                                    <p class="phantom-regular secondary-color">No Ideas Yet</p>
                                 </div>
 
                             </div>
 
                             <div class="card-wrapper">
 
-                                <div class="item classroom-card" th:each="course : ${courses}">
+                                <div class="item comment-card" th:each="dto : ${ideas}">
                                     <div class="content">
                                         <div class="header">
-                                            <h1 class="phantom-bold" th:text="${course.getTitle()}">Your Course Name</h1>
+                                            <h1 class="phantom-bold" th:text="${dto.getIdea().getName()}">Idea Name</h1>
                                         </div>
 
                                         <div class="sub-header">
-                                            <p class="phantom-regular" th:text="${course.getOwnerUsername()}">
-                                                Course Owner
-                                            </p>
+                                            <p class="phantom-regular" th:text="${dto.getAuthorFullName()}">Your Name</p>
                                         </div>
 
                                         <div class="description">
-                                            <p class="phantom-regular" th:text="${course.getDescription()}">Course description</p>
+                                            <p class="phantom-regular" th:text="${dto.getIdea().getDetails()}">...</p>
                                         </div>
 
                                         <div class="footer">
                                             <div class="date">
-                                                <p class="phantom-bold" th:text="${course.formattedTimestamp()}">
-                                                    12.12.2024
-                                                </p>
+                                                <p class="phantom-bold" th:text="${dto.getIdea().formattedTimestamp()}">...</p>
                                             </div>
 
                                             <div class="d-flex align-items-center">
                                                 <div class="statistic">
                                                     <div class="text">
-                                                        <p class="phantom-bold" th:text="${course.getMembers().size()}">Number of Members</p>
+                                                        <p class="phantom-bold" th:text="${dto.getIdea().calculateVotes()}">...</p>
                                                     </div>
                                                     <div class="icon">
-                                                        <i class="bi bi-people-fill"></i>
+                                                        <i class="bi bi-lightbulb"></i>
                                                     </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="actions-wrapper">
+                                                <div class="anchor">
+                                                    <a href="#">
+                                                        <img th:src="@{/images/like-btn-bg.svg}" alt="like-button">
+                                                    </a>
                                                 </div>
 
                                                 <div class="anchor">
-                                                    <a th:href="@{/overview(courseId=${course.getId()})}">
-                                                        <img th:src="@{/images/arrow-button.svg}" alt="arrow-next">
+                                                    <a href="#">
+                                                        <img th:src="@{/images/dislike-btn-bg.svg}" alt="dislike-button">
+                                                    </a>
+                                                </div>
+
+                                                <div class="anchor">
+                                                    <a href="#">
+                                                        <img th:src="@{/images/arrow-button.svg}" alt="next-button">
                                                     </a>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+
                             </div>
                         </div>
                     </div>
@@ -130,18 +146,18 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title phantom-medium" id="courseModalLabel">New Course</h5>
+                    <h5 class="modal-title phantom-medium" id="courseModalLabel">New Idea</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <form>
                         <div class="mb-3">
-                            <label for="courseName" class="col-form-label phantom-medium">Name:</label>
-                            <input type="text" class="form-control" id="courseName">
+                            <label for="ideaName" class="col-form-label phantom-medium">Name:</label>
+                            <input type="text" class="form-control" id="ideaName">
                         </div>
                         <div class="mb-3">
-                            <label for="courseDescription" class="col-form-label phantom-medium">Description:</label>
-                            <textarea class="form-control" id="courseDescription"></textarea>
+                            <label for="ideaDetails" class="col-form-label phantom-medium">Details:</label>
+                            <textarea class="form-control" id="ideaDetails"></textarea>
                         </div>
                     </form>
                 </div>
@@ -150,7 +166,7 @@
                         <button type="button" class="rounded bg-red pt-2 pb-2 ps-3 pe-3 phantom-medium" data-bs-dismiss="modal">Close</button>
                     </div>
                     <div class="general-btn">
-                        <button type="button" id="submitCourse" class="rounded bg-green pt-2 pb-2 ps-3 pe-3 phantom-medium" data-bs-dismiss="modal">Create</button>
+                        <button type="button" id="submitIdea" class="rounded bg-primary pt-2 pb-2 ps-3 pe-3 phantom-medium" data-bs-dismiss="modal">Suggest</button>
                     </div>
                 </div>
             </div>
@@ -175,8 +191,7 @@
     </div>
 
     <script th:src="@{/js/toast.js}"></script>
-    <script th:src="@{/js/course.js}"></script>
-    <!--<script th:src="@{/js/components.js}"></script>-->
+    <script th:src="@{/js/idea.js}"></script>
 
 </body>
 

@@ -8,7 +8,7 @@ const inputGroup = document.querySelector('#inputGroup');
 const nextBtn = document.querySelector('#nextBtn');
 const prevBtn = document.querySelector('#prevBtn');
 const submitBtn = document.querySelector('#submitBtn');
-const defaultTransitionDuration = 500;
+const defaultTransitionDuration = 250;
 
 const sections = [
     {
@@ -17,16 +17,16 @@ const sections = [
         inputs: [
             { id: 'email', type: 'email', icon: 'bi bi-envelope', label: 'Email', placeholder: 'Enter your Email', required: true },
             { id: 'password', type: 'password', icon: 'bi bi-key', label: 'Password', placeholder: 'Enter your Password', required: true },
-            { id: 'confirm-password', type: 'password', icon: 'bi bi-key', label: 'Confirm Password', placeholder: 'Re-enter your Password', required: true },
+            { id: 'confirmPassword', type: 'password', icon: 'bi bi-key', label: 'Confirm Password', placeholder: 'Re-enter your Password', required: true },
         ],
     },
     {
         id: '2',
         name: 'second-section',
         inputs: [
-            { id: 'first-name', type: 'text', label: 'First Name', placeholder: 'Enter your first name', icon: 'bi bi-person', required: true },
-            { id: 'last-name', type: 'text', label: 'Last Name', placeholder: 'Enter your last name', icon: 'bi bi-person', required: true },
-            { id: 'username', type: 'text', label: 'Username', placeholder: 'Enter your username', icon: 'bi bi-person', required: true },
+            { id: 'firstName', type: 'text', label: 'First Name', placeholder: 'Enter your first name', icon: 'bi bi-person', required: true },
+            { id: 'lastName', type: 'text', label: 'Last Name', placeholder: 'Enter your last name', icon: 'bi bi-person', required: true },
+            { id: 'username', type: 'text', label: 'Username', placeholder: 'Enter your username', icon: 'bi bi-hash', required: true },
         ],
     },
 ];
@@ -39,7 +39,6 @@ function checkFieldsValidity() {
     let allValid = true;
 
     // Email and password fields for extra validation
-    const emailField = section.inputs.find(input => input.type === 'email');
     const passwordFields = section.inputs.filter(input => input.type === 'password');
     const passwords = [];
 
@@ -70,7 +69,7 @@ function checkFieldsValidity() {
         }
     });
 
-    // Check if all password fields match
+    // Check if all password fields matches
     if (passwordFields.length > 1 && new Set(passwords).size !== 1) {
         warning.innerText = 'Passwords do not match!';
         allValid = false;
@@ -127,9 +126,10 @@ function injectSection(sectionId, transitionDuration = defaultTransitionDuration
 
         inputGroup.style.opacity = 1;
 
-        if (transitionDuration === 0) { // Initial load
-            addPasswordToggleListeners();
-        }
+        //if (transitionDuration === 0) { // Initial load
+        //    addPasswordToggleListeners();
+        //}
+        addPasswordToggleListeners();
 
     }, transitionDuration);
 }
@@ -167,7 +167,9 @@ function toggleSubmitButton() {
     }, defaultTransitionDuration);
 }
 
-function nextSection() {
+function nextSection(e) {
+    e.preventDefault();
+
     if (!checkFieldsValidity()) return;
 
     const currentSection = sections.find(sec => sec.id === `${state.currentSection}`);
@@ -183,17 +185,19 @@ function nextSection() {
     }
 }
 
-function prevSection() {
+function prevSection(e) {
+    e.preventDefault();
+
     const currentSection = sections.find(sec => sec.id === `${state.currentSection}`);
     storeData(currentSection);
+
+    if (state.currentSection === sections.length) {
+        toggleSubmitButton();
+    }
 
     if (state.currentSection > 1) {
         state.currentSection -= 1;
         injectSection(state.currentSection);
-    }
-
-    if (state.currentSection < sections.length) {
-        toggleSubmitButton();
     }
 }
 
@@ -222,20 +226,47 @@ async function submitData(e) {
     })
         .then(response => {
             if (!response.ok) {
-                throw new Error(`Failed to register: ${response.status} ${response.statusText}`);
+                return response.body.getReader().read().then(({ value }) => {
+                    const message = new TextDecoder().decode(value);
+
+                    // Display error message
+                    showToast(
+                        'Error',
+                        ['bi', 'bi-x-circle'],
+                        'Registration failed!',
+                        'red-color',
+                        10000,
+                        message
+                    )
+
+                    throw new Error(`Failed to register: ${response.status} ${response.statusText} ${message}`);
+                });
+
+            } else {
+                // Redirect to login page on successful registration
+                if (response.ok) {
+
+                    // Show toast message
+                    showToast(
+                        'Success',
+                        ['bi', 'bi-check-circle'],
+                        'Registration successful!',
+                        'green-color',
+                        2000,
+                        'You can now login with your credentials. Redirecting...'
+                    );
+
+                    setTimeout(() => {
+                        window.location.href = `${baseUrl}/login`; // Use dynamic base URL
+                    }, 2000);
+                }
             }
-            return response.json(); // Parse JSON if the response is successful
-        })
-        .then(response => {
-            console.log('Registration successful:', response); // Handle successful response
+        }).catch(
+            error => {
+                console.error(error);
+            }
+        )
 
-            // Redirect to the login page
-            window.location.href = `${baseUrl}/login`;
-
-        })
-        .catch(err => {
-            console.error('Registration error:', err); // Log error with additional context
-        });
 }
 
 

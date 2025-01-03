@@ -1,5 +1,7 @@
 package it.mikeslab.thebox.entity;
 
+import it.mikeslab.thebox.pojo.Idea;
+import it.mikeslab.thebox.util.StringUtil;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
@@ -17,7 +19,7 @@ public class Course {
 
     private String title;
     private String description;
-    private User owner; // Stored as user due to rendering issues.
+    private String ownerUsername; // Not editable
 
     private List<String> members; // User IDs
 
@@ -25,5 +27,9 @@ public class Course {
 
     // Ideas are stored as a list for sorting purposes.
     private List<Idea> ideas;
+
+    public String formattedTimestamp() {
+        return StringUtil.formatTimestamp(timestamp);
+    }
 
 }

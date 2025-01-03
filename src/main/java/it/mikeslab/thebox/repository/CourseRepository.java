@@ -9,7 +9,7 @@ import java.util.List;
 public interface CourseRepository extends MongoRepository<Course, String> {
 
     Course findByTitle(String title);
-    Course findByOwnerId(String ownerId);
+    Course findByOwnerUsername(String username);
 
     List<Course> findCoursesByMembersContaining(String userId);
 
