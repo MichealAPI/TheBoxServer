@@ -2,28 +2,30 @@ package it.mikeslab.thebox.rest;
 
 import it.mikeslab.thebox.entity.Course;
 import it.mikeslab.thebox.entity.User;
+import it.mikeslab.thebox.helper.ValidationResult;
 import it.mikeslab.thebox.service.CourseService;
+import it.mikeslab.thebox.service.UserService;
+import jakarta.mail.internet.MimeMessage;
+import lombok.RequiredArgsConstructor;
 import org.bson.BsonDocument;
 import org.bson.conversions.Bson;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.RequestEntity;
+import org.bson.types.ObjectId;
+import org.springframework.core.env.Environment;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/courses")
 public class CourseRestController {
 
     private final CourseService courseService;
-
-    @Autowired
-    public CourseRestController(CourseService courseService) {
-        this.courseService = courseService;
-    }
+    private final UserService userService;
 
     // Secured endpoint to get all courses a user has joined
     @GetMapping("/joined/{userId}")
@@ -54,15 +56,16 @@ public class CourseRestController {
 
         User owner = (User) objUser;
 
-        Course course = new Course(
-                null,
-                document.getString("title").getValue(),
-                document.getString("description").getValue(),
-                owner.getUsername(),
-                List.of(owner.getId()),
-                System.currentTimeMillis(),
-                List.of()
-        );
+
+        Course course = Course.builder()
+                .title(document.getString("title").getValue())
+                .description(document.getString("description").getValue())
+                .ownerUsername(owner.getUsername())
+                .members(List.of(owner.getUsername()))
+                .timestamp(System.currentTimeMillis())
+                .ideas(Collections.emptyMap())
+                .invites(Collections.emptyMap())
+                .build();
 
         Course result = courseService.createCourse(course);
 
@@ -74,6 +77,8 @@ public class CourseRestController {
 
         return ResponseEntity.ok().build();
     }
+
+
 
 
 }

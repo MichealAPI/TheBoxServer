@@ -21,6 +21,18 @@
     color: red;
 }
 
+.bg-blue {
+    background: var(--blue);
+}
+
+.blue-color {
+    color: var(--blue);
+}
+
+.bg-black {
+    background: var(--black);
+}
+
 .bg-gray {
     background: var(--gray);
 }

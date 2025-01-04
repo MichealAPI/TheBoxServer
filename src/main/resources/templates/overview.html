@@ -19,7 +19,7 @@
 
 <body>
     
-    <div id="navbar" th:insert="navbar"></div>
+    <div id="navbar" th:insert="fragments/navbar :: #navbar(userInitial=${userInitial})"></div>
     <div id="sidebar" th:insert="fragments/sidebar :: #sidebar(userInitial=${userInitial}, firstName=${firstName}, lastName=${lastName}, username=${username})"></div>
 
     <div class="container-fluid">
@@ -38,7 +38,7 @@
                                 </a>
 
                                 <p class="phantom-bold m-0" th:text="${course.getTitle()}">
-                                    Your Class
+                                    [Your Class]
                                 </p>
 
                                 <div class="d-none d-md-block general-btn">
@@ -46,6 +46,15 @@
                                         <div class="d-flex justify-content-between align-items-center p-1 pe-2 ps-2">
                                             <p class="phantom-regular primary-color m-0 ps-2">Idea</p>
                                             <i class="bi bi-plus m-0 fs-3 primary-color ps-1"></i>
+                                        </div>
+                                    </button>
+                                </div>
+
+                                <div class="d-none d-md-block general-btn" th:if="${course.getOwnerUsername() == username}">
+                                    <button type="button" class="bg-green rounded outline-transparent">
+                                        <div class="d-flex justify-content-between align-items-center p-1 pe-2 ps-2" data-bs-toggle="modal" data-bs-target="#inviteModal">
+                                            <p class="phantom-regular primary-color m-0 ps-2">Invite</p>
+                                            <i class="bi bi-person-fill-add m-0 fs-3 primary-color ps-1"></i>
                                         </div>
                                     </button>
                                 </div>
@@ -70,7 +79,7 @@
 
                             <div class="card-wrapper">
 
-                                <div class="item comment-card" th:each="dto : ${ideas}">
+                                <div class="item comment-card" th:id="'idea-'+${dto.getIdea().getId()}" th:each="dto : ${ideas}">
                                     <div class="content">
                                         <div class="header">
                                             <h1 class="phantom-bold" th:text="${dto.getIdea().getName()}">Idea Name</h1>
@@ -92,7 +101,7 @@
                                             <div class="d-flex align-items-center">
                                                 <div class="statistic">
                                                     <div class="text">
-                                                        <p class="phantom-bold" th:text="${dto.getIdea().calculateVotes()}">...</p>
+                                                        <p class="phantom-bold vote-count" th:text="${dto.getIdea().calculateVotes()}">...</p>
                                                     </div>
                                                     <div class="icon">
                                                         <i class="bi bi-lightbulb"></i>
@@ -102,19 +111,19 @@
 
                                             <div class="actions-wrapper">
                                                 <div class="anchor">
-                                                    <a href="#">
+                                                    <a href="#" class="vote-btn" th:data-idea-id="${dto.getIdea().getId()}" th:data-course-id="${dto.getCourseId()}" data-vote="up">
                                                         <img th:src="@{/images/like-btn-bg.svg}" alt="like-button">
                                                     </a>
                                                 </div>
 
                                                 <div class="anchor">
-                                                    <a href="#">
+                                                    <a href="#" class="vote-btn" th:data-idea-id="${dto.getIdea().getId()}" th:data-course-id="${dto.getCourseId()}" data-vote="down">
                                                         <img th:src="@{/images/dislike-btn-bg.svg}" alt="dislike-button">
                                                     </a>
                                                 </div>
 
                                                 <div class="anchor">
-                                                    <a href="#">
+                                                    <a href="#" th:href="'/stream?courseId=' + ${course.getId()} + '&ideaId=' + ${dto.getIdea().getId()}">
                                                         <img th:src="@{/images/arrow-button.svg}" alt="next-button">
                                                     </a>
                                                 </div>
@@ -173,6 +182,34 @@
         </div>
     </div>
 
+
+    <div class="modal fade" id="inviteModal" th:if="${course.getOwnerUsername() == username}" th:data-course-id="${course.getId()}" tabindex="-1" aria-labelledby="inviteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title phantom-medium" id="inviteModalLabel">Invite</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <label for="targetEmail" class="col-form-label phantom-medium">Who are you inviting?</label>
+                            <input type="email" class="form-control" id="targetEmail">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <div class="general-btn">
+                        <button type="button" class="rounded bg-red pt-2 pb-2 ps-3 pe-3 phantom-medium" data-bs-dismiss="modal">Close</button>
+                    </div>
+                    <div class="general-btn">
+                        <button type="button" id="submitInvite" class="rounded bg-green pt-2 pb-2 ps-3 pe-3 phantom-medium" data-bs-dismiss="modal">Invite</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="toast-container position-fixed bottom-0 end-0 p-3">
         <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
             <div class="toast-header">
@@ -192,6 +229,8 @@
 
     <script th:src="@{/js/toast.js}"></script>
     <script th:src="@{/js/idea.js}"></script>
+    <script th:src="@{/js/vote.js}"></script>
+    <script th:src="@{/js/invite.js}" th:if="${course.getOwnerUsername() == username}"></script>
 
 </body>
 

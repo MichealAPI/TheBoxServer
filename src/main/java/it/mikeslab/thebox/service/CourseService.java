@@ -22,8 +22,53 @@ public class CourseService {
         return courseRepository.save(course);
     }
 
-    public Course getCourse(String courseId) {
-        return courseRepository.findById(courseId).orElse(null);
+    public void addInvite(Course course, String username, String inviteId) {
+        if (course != null) {
+            course.getInvites().put(inviteId, username);
+            courseRepository.save(course);
+        }
+    }
+
+    public void removeInvite(Course course, String inviteId) {
+        if (course != null) {
+            course.getInvites().remove(inviteId);
+            courseRepository.save(course);
+        }
+    }
+
+    public void addMember(String courseId, String userId) {
+        Course course = fetchCourseById(courseId);
+        if (course != null) {
+            course.getMembers().add(userId);
+            courseRepository.save(course);
+        }
+    }
+
+    public void addMember(Course course, String userId) {
+        if (course != null) {
+            course.getMembers().add(userId);
+            courseRepository.save(course);
+        }
+    }
+
+    public boolean upsertIdea(String courseId, Idea idea) {
+
+        Course course = fetchCourseById(courseId);
+
+        if (course != null && course.getIdeas() != null) {
+            course.getIdeas().put(idea.getId(), idea);
+            courseRepository.save(course);
+            return true;
+        }
+        return false;
+    }
+
+    public Idea getIdea(String ideaId, String courseId) {
+        Course course = fetchCourseById(courseId);
+        if (course != null) {
+            return course.getIdeas().get(ideaId);
+        }
+        return null;
     }
 
     public Course getCourseByTitle(String title) {
@@ -34,8 +79,8 @@ public class CourseService {
         return courseRepository.findByOwnerUsername(username);
     }
 
-    public boolean deleteCourse(String title) {
-        Course course = courseRepository.findByTitle(title);
+    public boolean deleteCourse(String id) {
+        Course course = fetchCourseById(id);
         if (course != null) {
             courseRepository.delete(course);
             return true;
@@ -43,46 +88,43 @@ public class CourseService {
         return false;
     }
 
-    public Idea addIdeaToCourse(String courseId, Idea idea) {
-        Course course = courseRepository.findById(courseId).orElse(null);
-        if (course != null) {
-            course.getIdeas().add(idea);
-            courseRepository.save(course);
-            return idea;
-        }
-        return null;
-    }
 
     public List<IdeaDTO> getAllIdeasWithAuthors(String courseId) {
-
-        Course course = this.getCourse(courseId);
-
-        List<IdeaDTO> ideas = new ArrayList<>();
-
-        for(Idea idea : course.getIdeas()) {
-
-            // Retrieve author as User
-
-            User author = userService.getUserByUsername(idea.getAuthorUsername());
-
-            if (author == null) {
-                continue;
-            }
-
-            ideas.add(
-                    new IdeaDTO(
-                            idea,
-                            author.getUsername(),
-                            author.getFirstName(),
-                            author.getLastName()
-                    ));
-
+        Course course = fetchCourseById(courseId);
+        if (course == null) {
+            return new ArrayList<>();
         }
-
-        return ideas;
+        return course.getIdeas().values().stream()
+                .map(idea -> mapIdeaToDTO(idea, courseId))
+                .filter(java.util.Objects::nonNull)
+                .toList();
     }
 
-    public List<Course> getCoursesByMember(String userId) {
-        return courseRepository.findCoursesByMembersContaining(userId);
+
+    public List<Course> getCoursesByMember(String username) {
+        return courseRepository.findCoursesByMembersContaining(username);
+    }
+
+
+    public Course fetchCourseById(String courseId) {
+        return courseRepository.findById(courseId).orElse(null);
+    }
+
+    private boolean isValidCourse(Course course) {
+        return course != null && course.getIdeas() != null;
+    }
+
+    private IdeaDTO mapIdeaToDTO(Idea idea, String courseId) {
+        User author = userService.getUserByUsername(idea.getAuthorUsername());
+        if (author == null) {
+            return null;
+        }
+        return new IdeaDTO(
+                idea,
+                courseId,
+                author.getUsername(),
+                author.getFirstName(),
+                author.getLastName()
+        );
     }
 }

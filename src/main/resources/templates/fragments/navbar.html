@@ -1,5 +1,5 @@
     <!-- Navbar, only for devices smaller than md -->
-    <div class="d-md-none">
+    <div class="d-md-none" id="navbar">
 
         <!-- Navbar content -->
         <div class="collapse" id="navbarToggleExternalContent">
@@ -41,13 +41,22 @@
                         </div>
                     </a>
                 </div>
+
+                <div class="navbar-element">
+                    <a href="#" th:href="@{/logout}">
+                        <div class="d-flex align-items-center justify-content-center gap-1">
+                            <i class="bi bi-box-arrow-left red-color"></i>
+                            <p class="phantom-regular m-0 red-color">Logout</p>
+                        </div>
+                    </a>
+                </div>
             </div>
         </div>
 
         <!-- Profile icon -->
         <nav class="navbar navbar-dark bg-navbar">
             <div class="container-fluid d-flex">
-                <div class="avatar">
+                <div class="avatar bg-blue">
                     <!-- Todo: add image -->
 
                     <div class="letter">

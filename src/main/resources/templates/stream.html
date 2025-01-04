@@ -20,34 +20,33 @@
 
 <body>
 
-    <div id="sidebar"></div>
-    <div id="navbar"></div>
+    <div id="navbar" th:insert="fragments/navbar :: #navbar(userInitial=${userInitial})"></div>
+    <div id="sidebar" th:insert="fragments/sidebar :: #sidebar(userInitial=${userInitial}, firstName=${firstName}, lastName=${lastName}, username=${username})"></div>
 
     <div class="page-content-wrapper">
 
         <div class="page-header">
-            <div class="d-flex gap-2 align-items-center">
+            <a th:href="'/overview?courseId='+ ${course.getId()}" class="d-flex gap-2 align-items-center text-decoration-none">
                 <i class="bi bi-arrow-left"></i>
-                <p class="phantom-bold">Idea</p>
-            </div>
+            </a>
         </div>
 
-        <div class="banner banner-bg">
+        <div class="banner banner-bg" th:id="'idea-'+${idea.getId()}">
             <div class="wrapper">
 
                 <div class="header">
                     <div class="title">
-                        <h1 class="phantom-bold">Hosting a Pizza Party! :pizza:</h1>
+                        <h1 class="phantom-bold" th:text="${idea.getName()}">[Idea Name]</h1>
                     </div>
                     <div class="subtitle">
-                        <p class="phantom-regular">By Michele Cippone</p>
+                        <p class="phantom-regular" th:text="'By #'+${idea.getAuthorUsername()}">[Idea Author]</p>
                     </div>
                 </div>
 
                 <div class="footer">
                     <div class="counter">
                         <div class="number">
-                            <p class="phantom-bold">200</p>
+                            <p class="phantom-bold vote-count" th:text="${idea.calculateVotes()}">[Likes]</p>
                         </div>
 
                         <div class="icon">
@@ -57,13 +56,13 @@
 
                     <div class="actions-wrapper">
                         <div class="anchor">
-                            <a draggable="false" th:href="@{#}">
+                            <a draggable="false" href="#" class="vote-btn" th:data-idea-id="${idea.getId()}" th:data-course-id="${course.getId()}" data-vote="up">
                                 <img draggable="false" th:src="@{/images/like-btn-bg.svg}" alt="like-button">
                             </a>
                         </div>
         
                         <div class="anchor">
-                            <a draggable="false" th:href="@{#}">
+                            <a draggable="false" href="#" class="vote-btn" th:data-idea-id="${idea.getId()}" th:data-course-id="${course.getId()}" data-vote="down">
                                 <img draggable="false" th:src="@{/images/dislike-btn-bg.svg}" alt="dislike-button">
                             </a>
                         </div>
@@ -75,32 +74,31 @@
         <div class="idea">
             <div class="description">
                 <div class="section-title">
-                    <p class="phantom-regular">DESCRIPTION</p>
+                    <p class="phantom-regular">DETAILS</p>
                 </div>
 
                 <div class="content">
-                    <p class="phantom-regular">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod  tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim  veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea  commodo consequat. Duis aute irure dolor in reprehenderit in voluptate  velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint  occaecat cupidatat non proident, sunt in culpa qui officia deserunt  mollit anim id est laborum.
-                    </p>
+                    <p class="phantom-regular" th:text="${idea.getDetails()}">[Idea Details]</p>
                 </div>
             </div>
         </div>
 
         <div class="input-wrapper">
             <div class="comment-input">
-                <textarea class="phantom-regular" placeholder="Write a comment..."></textarea>
+                <label for="commentInput"></label>
+                <textarea id="commentInput" class="phantom-regular" placeholder="Write a comment..."></textarea>
             </div>
 
             <div class="actions-wrapper">
 
-                <div id="anonymousSwitcher" class="anonymous-switcher">
+                <div id="anonymousSwitcher" class="anonymous-switcher bg-green" data-checked="false">
                     <div class="icon">
-                        <i class="bi bi-person-fill-x"></i>
+                        <i class="bi bi-person-fill" id="switcher-icon"></i>
                     </div>
                 </div>
 
                 <div class="send-button">
-                    <button class="phantom-bold">
+                    <button class="phantom-bold" id="postBtn" th:data-username="${username}">
                         <div class="content">
                             <div class="icon">
                                 <i class="bi bi-send-fill"></i>
@@ -116,24 +114,28 @@
         </div>
 
         <div class="comment-wrapper">
-            <div class="comment">
+            <div class="comment" th:each="comment : ${idea.getComments().reversed()}">
 
-                <div class="avatar">A</div>
+                <div class="avatar" th:classappend="${comment.getAuthor() == 'Anonymous' ? 'bg-black' : 'bg-blue'}">
+                    <div class="letter">
+                        <p class="phantom-medium m-0" th:text="${comment.getAuthor()} == 'Anonymous' ? '*' : ${comment.getAuthorInitial()}">[Author Initial]</p>
+                    </div>
+                </div>
 
                 <div class="content">
                     <div class="header">
                         <div class="author">
-                            <p class="phantom-medium">AUTHOR</p>
+                            <p class="phantom-medium" th:text="${comment.getAuthor()}">[Author Username]</p>
                         </div>
 
                         <div class="date">
-                            <p class="phantom-bold">3 hours ago</p>
+                            <p class="phantom-bold" th:text="${comment.formattedTimestamp()}">[Formatted Timestamp]</p>
                         </div>
                     </div>
 
                     <div class="text">
-                        <p class="phantom-regular">
-                            I bambini in africa potrebbero mangiare quelle pizze.
+                        <p class="phantom-regular" th:text="${comment.getContent()}">
+                            [Comment Content]
                         </p>
                     </div>
                 </div>
@@ -141,7 +143,29 @@
         </div>
     </div>
 
-    <script th:src="@{/js/components.js}"></script>    
+
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <div class="me-2">
+                    <div id="toastIconColor">
+                        <i id="toastIcon"></i>
+                    </div>
+                </div>
+                <strong class="me-auto" id="toastTitle"></strong>
+                <small id="toastSmallText"></small>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body" id="toastBody">
+            </div>
+        </div>
+    </div>
+
+    <script th:src="@{/js/toast.js}"></script>
+    <script th:src="@{/js/components.js}"></script>
+    <script th:src="@{/js/vote.js}"></script>
+    <script th:src="@{/js/comment.js}"></script>
+    <script th:src="@{/js/anonymizer.js}"></script>
 
 </body>
 

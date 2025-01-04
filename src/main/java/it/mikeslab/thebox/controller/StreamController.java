@@ -13,12 +13,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequiredArgsConstructor
-public class OverviewController {
+public class StreamController {
 
     private final CourseService courseService;
 
-    @GetMapping("/overview")
-    public String overviewPage(@RequestParam String courseId, Model model) {
+    @GetMapping("/stream")
+    public String streamPage(@RequestParam String courseId, @RequestParam String ideaId, Model model) {
+
+        Course course = courseService.fetchCourseById(courseId);
+
+        if (course == null) {
+            return "redirect:/courses";
+        }
 
         // Retrieve user by session
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -27,21 +33,16 @@ public class OverviewController {
         if (objUser == null) {
             return "redirect:/login";
         }
+
         if (objUser instanceof User user) {
             model.addAllAttributes(user.toMap());
             model.addAttribute("userInitial", user.getUsername().charAt(0));
         }
 
-        Course course = courseService.fetchCourseById(courseId);
-
-        if (course == null) {
-            return "redirect:/courses";
-        }
-
         model.addAttribute("course", course);
-        model.addAttribute("ideas", courseService.getAllIdeasWithAuthors(courseId));
+        model.addAttribute("idea", course.getIdeas().get(ideaId));
 
-        return "overview";
+        return "stream";
     }
 
 }

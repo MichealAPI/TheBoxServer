@@ -60,4 +60,8 @@ public class User implements UserDetails {
         return Set.of("username", "email", "firstName", "lastName", "password");
     }
 
+    public String getFullName() {
+        return StringUtil.capitalize(firstName) + " " + StringUtil.capitalize(lastName);
+    }
+
 }

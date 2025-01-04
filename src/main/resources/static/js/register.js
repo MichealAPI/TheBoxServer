@@ -67,6 +67,16 @@ function checkFieldsValidity() {
         if (input.type === 'password') {
             passwords.push(inputField.value);
         }
+
+        // Check if the username contains special characters
+        if (input.id === 'username') {
+            const usernamePattern = /^[a-zA-Z0-9]+$/;
+            if (!usernamePattern.test(inputField.value)) {
+                warning.innerText = 'Username must contain only alphanumeric characters!';
+                inputField.classList.add('invalid');
+                allValid = false;
+            }
+        }
     });
 
     // Check if all password fields matches

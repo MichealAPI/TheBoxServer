@@ -11,6 +11,8 @@ public class IdeaDTO {
 
     private final Idea idea;
 
+    private final String courseId;
+
     private final String username,
             firstName,
             lastName;

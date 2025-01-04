@@ -23,8 +23,16 @@ document.getElementById("submitIdea").addEventListener("click", function () {
     })
         .then(response => {
 
+            // Print response to console
+
+
             if (!response.ok) {
-                throw new Error('Failed to create idea');
+
+                response.body.getReader().read().then(({ value }) => {
+                    const message = new TextDecoder().decode(value);
+                    throw new Error(message);
+                });
+
             }
 
         })

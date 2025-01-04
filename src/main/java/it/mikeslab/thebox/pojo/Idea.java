@@ -1,16 +1,18 @@
 package it.mikeslab.thebox.pojo;
 
-import it.mikeslab.thebox.entity.Comment;
 import it.mikeslab.thebox.util.StringUtil;
 import lombok.Data;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.bson.types.ObjectId;
 
 import java.util.List;
 import java.util.Map;
 
 @Data
 public class Idea {
+
+    private ObjectId id = new ObjectId();
 
     private String name;
     private String details;
@@ -40,6 +42,10 @@ public class Idea {
         return votes.values().stream().mapToInt(Vote::getValue).sum();
     }
 
+    public String getId() {
+        return id.toHexString();
+    }
+
     @Getter
     @RequiredArgsConstructor
     public enum Vote {
@@ -47,6 +53,10 @@ public class Idea {
         DOWN(-1);
 
         private final int value;
+
+        public static Vote fromInt(int value) {
+            return value > 0 ? UP : DOWN;
+        }
     }
 
 }

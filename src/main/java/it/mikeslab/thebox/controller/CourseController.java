@@ -31,10 +31,10 @@ public class CourseController {
 
 
         if (objUser instanceof User user) {
-            List<Course> courses = courseService.getCoursesByMember(user.getId());
+            List<Course> courses = courseService.getCoursesByMember(user.getUsername());
             model.addAttribute("courses", courses);
 
-            model.addAttribute("userInitial", user.getFirstName().charAt(0));
+            model.addAttribute("userInitial", user.getUsername().charAt(0));
 
             model.addAllAttributes(user.toMap());
 

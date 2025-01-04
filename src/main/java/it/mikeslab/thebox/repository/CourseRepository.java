@@ -11,6 +11,6 @@ public interface CourseRepository extends MongoRepository<Course, String> {
     Course findByTitle(String title);
     Course findByOwnerUsername(String username);
 
-    List<Course> findCoursesByMembersContaining(String userId);
+    List<Course> findCoursesByMembersContaining(String username);
 
 }

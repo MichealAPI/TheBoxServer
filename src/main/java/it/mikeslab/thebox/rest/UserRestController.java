@@ -4,12 +4,13 @@ import it.mikeslab.thebox.entity.User;
 import it.mikeslab.thebox.service.UserService;
 import it.mikeslab.thebox.util.AuthUtil;
 import org.bson.BsonDocument;
-import org.bson.conversions.Bson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Optional;
 
 @RestController
 public class UserRestController {
@@ -33,8 +34,15 @@ public class UserRestController {
         // Register the user
 
         // Converting to BSON for MongoDB
-        Bson bson = BsonDocument.parse(payload);
-        BsonDocument document = bson.toBsonDocument(BsonDocument.class, null);
+        Optional<BsonDocument> optDocument = Optional.ofNullable(BsonDocument.parse(payload));
+
+        if(optDocument.isEmpty()) {
+            return ResponseEntity.badRequest().body(
+                    "Invalid payload"
+            );
+        }
+
+        BsonDocument document = optDocument.get();
 
         // Checking if the document contains all required fields
         if(!AuthUtil.containsFields(document, User.getFields())) {
