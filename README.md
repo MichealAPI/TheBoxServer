@@ -92,6 +92,8 @@ Follow these steps to set up the application locally:
 5. Open the application in your browser:  
    By default, the application runs on `http://localhost:8080`.
 
+6. Note: Some addresses in links may need to be adjusted based on your local setup.
+
 ---
 
 ## Usage Examples

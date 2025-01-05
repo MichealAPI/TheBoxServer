@@ -89,7 +89,7 @@ public class EmailRestController {
                         "targetEmail", user.getEmail(),
                         "fullName", user.getFullName(),
                         "subject", "Invitation to join course",
-                        "confirmationUrl", "http://localhost:8080/api/courses/invite/confirm/" + inviteId + "?courseId=" + courseId,
+                        "confirmationUrl", environment.getProperty("url.base") + "/api/courses/invite/confirm/" + inviteId + "?courseId=" + courseId,
                         "template", "invite",
                         "course", course
                     )
@@ -142,7 +142,7 @@ public class EmailRestController {
                                         "targetEmail", user.getEmail(),
                                         "targetFullName", user.getFullName(),
                                         "subject", "Verify your account",
-                                        "confirmationUrl", "http://localhost:8080/registration/verify?token=" + verificationId + "&username=" + user.getUsername(),
+                                        "confirmationUrl", environment.getProperty("url.base") + "/registration/verify?token=" + verificationId + "&username=" + user.getUsername(),
                                         "template", "verify"
                                 )
                         )
