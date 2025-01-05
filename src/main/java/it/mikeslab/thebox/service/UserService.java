@@ -4,16 +4,11 @@ import it.mikeslab.thebox.entity.User;
 import it.mikeslab.thebox.exception.EmailAlreadyUsedException;
 import it.mikeslab.thebox.exception.UsernameAlreadyUsedException;
 import it.mikeslab.thebox.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
-import java.util.HashSet;
-import java.util.Set;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -32,11 +27,15 @@ public class UserService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
-        //User user = this.getUserByEmail(email);
+        User user = this.getUserByEmail(email);
+
+        if (user == null || !user.isEnabled()) {
+            throw new UsernameNotFoundException("No user found for '"+ email + "'.");
+        }
 
         //Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
 
-        return this.getUserByEmail(email);
+        return user;
     }
 
     public User getUserByEmail(String email) throws UsernameNotFoundException {
@@ -77,6 +76,29 @@ public class UserService implements UserDetailsService {
 
         userRepository.save(user);
 
+    }
+
+    public void addVerification(User user, String verificationId) {
+        user.setVerificationToken(verificationId);
+        userRepository.save(user);
+    }
+
+    public boolean verifyUser(String username, String verificationId) {
+
+        User user = userRepository.findByUsername(username);
+
+        if (user == null) {
+            return false;
+        }
+
+        if (!user.getVerificationToken().equals(verificationId)) {
+            return false;
+        }
+
+        user.setVerificationToken("none");
+
+        userRepository.save(user);
+        return true;
     }
 
 }

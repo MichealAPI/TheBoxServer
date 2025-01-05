@@ -232,6 +232,10 @@
     <script th:src="@{/js/vote.js}"></script>
     <script th:src="@{/js/invite.js}" th:if="${course.getOwnerUsername() == username}"></script>
 
+    <script th:if="${param.join} == 'success'">
+        showToast('success', 'Joined Course', 'You have successfully joined the course.');
+    </script>
+
 </body>
 
 

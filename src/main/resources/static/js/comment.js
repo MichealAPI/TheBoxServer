@@ -21,10 +21,9 @@ postBtn.addEventListener('click', async (e) => { // Make the listener function `
     const courseId = urlParams.get('courseId');
     const ideaId = urlParams.get('ideaId');
 
-    let username = e.target.getAttribute('data-username');
+    let username = e.currentTarget.getAttribute('data-username');
 
     let content = commentInput.value;
-    commentInput.value = '';
 
     if (isAnonymous()) {
 
@@ -48,6 +47,8 @@ postBtn.addEventListener('click', async (e) => { // Make the listener function `
         content: content
     };
 
+    postBtn.disabled = true;
+
     fetch('/api/ideas/comment/create', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -70,7 +71,7 @@ postBtn.addEventListener('click', async (e) => { // Make the listener function `
                 3000,
                 "Comment created successfully!"
             );
-            location.reload();
+            location.reload(); // The button will be automatically enabled after reload
         })
         .catch(error => {
             console.error('Error:', error);

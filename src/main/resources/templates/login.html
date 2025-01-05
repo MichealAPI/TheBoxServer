@@ -142,7 +142,7 @@
             <div class="row">
                 <div class="col-md-12 d-flex justify-content-center">
                     <div class="footer">
-                        <p class="phantom-regular">© 2024 The Box. All rights reserved.</p>
+                        <p class="phantom-regular">© 2025 The Box. All rights reserved.</p>
                     </div>
                 </div>
             </div>
@@ -170,6 +170,22 @@
 
     <script defer th:src="@{/js/input.js}"></script>
     <script th:src="@{/js/toast.js}"></script>
+
+    <script th:if="${#strings.toString(param.verification)} == 'success'">
+        showToast('Success', ['bi', 'bi-check-circle'], 'Success', 'green-color', 5000, 'Email verified successfully');
+    </script>
+
+    <script th:if="${#strings.toString(param.verification)} == 'failed'">
+        showToast('Error', ['bi', 'bi-exclamation-triangle'], 'Error', 'red-color', 5000, 'Invalid verification token');
+    </script>
+
+    <script th:if="${#strings.toString(param.join)} == 'success'">
+        showToast('Success', ['bi', 'bi-check-circle'], 'Success', 'green-color', 5000, 'Joined successfully to the course, please log-in');
+    </script>
+
+    <script th:if="${#strings.toString(param.join)} == 'failed'">
+        showToast('Error', ['bi', 'bi-exclamation-triangle'], 'Error', 'red-color', 5000, 'Invalid course join token');
+    </script>
 
     <script th:if="${param.error}">
         showToast('Error', ['bi', 'bi-exclamation-triangle'], 'Error', 'red-color', 5000, 'Invalid email or password');

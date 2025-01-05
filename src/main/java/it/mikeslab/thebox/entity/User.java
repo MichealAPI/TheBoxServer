@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.bson.BsonDocument;
+import org.bson.BsonString;
+import org.bson.BsonValue;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.core.GrantedAuthority;
@@ -28,6 +30,8 @@ public class User implements UserDetails {
                     lastName,
                     password;
 
+    private String verificationToken;
+
     private List<Course> courses;
 
     private Collection<? extends GrantedAuthority> authorities;
@@ -38,6 +42,8 @@ public class User implements UserDetails {
         this.email = document.getString("email").getValue();
         this.firstName = document.getString("firstName").getValue();
         this.lastName = document.getString("lastName").getValue();
+
+        this.verificationToken = document.getString("verificationToken", new BsonString("not-verified")).getValue();
 
         // Encode the password before storing it
         this.password = AuthUtil.bCryptEncode(document.getString("password").getValue());
@@ -64,4 +70,23 @@ public class User implements UserDetails {
         return StringUtil.capitalize(firstName) + " " + StringUtil.capitalize(lastName);
     }
 
+    @Override
+    public boolean isAccountNonExpired() {
+        return UserDetails.super.isAccountNonExpired();
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return UserDetails.super.isAccountNonLocked();
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return UserDetails.super.isCredentialsNonExpired();
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return Objects.equals(verificationToken, "none");
+    }
 }

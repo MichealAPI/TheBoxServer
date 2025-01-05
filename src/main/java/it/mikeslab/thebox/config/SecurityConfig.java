@@ -46,8 +46,8 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable) // todo: educational purposes only, do not use in production
                 // Exclude static resources from security filters
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/static/**", "/js/**", "/images/**", "/components/**", "/css/**").permitAll() // Permit all access to static resources
-                        .requestMatchers("/", "/register", "/api/register").permitAll()
+                        .requestMatchers("/static/**", "/js/**", "/videos/**", "/images/**", "/components/**", "/css/**").permitAll() // Permit all access to static resources
+                        .requestMatchers("/", "/login", "/register", "/api/**", "/registration/verify/**", "/registration/verify", "/registration/**").permitAll()
                         .anyRequest().authenticated() // All other requests require authentication
                 )
                 // Configure custom login page

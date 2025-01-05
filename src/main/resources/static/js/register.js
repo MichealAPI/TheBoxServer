@@ -255,20 +255,7 @@ async function submitData(e) {
             } else {
                 // Redirect to login page on successful registration
                 if (response.ok) {
-
-                    // Show toast message
-                    showToast(
-                        'Success',
-                        ['bi', 'bi-check-circle'],
-                        'Registration successful!',
-                        'green-color',
-                        2000,
-                        'You can now login with your credentials. Redirecting...'
-                    );
-
-                    setTimeout(() => {
-                        window.location.href = `${baseUrl}/login`; // Use dynamic base URL
-                    }, 2000);
+                    verify(data.email);
                 }
             }
         }).catch(
@@ -276,6 +263,47 @@ async function submitData(e) {
                 console.error(error);
             }
         )
+
+}
+
+function verify(targetEmail) {
+
+    // Sends a POST request to /auth/verify with target: targetEmail as payload
+
+    const payload = {
+        target: targetEmail
+    };
+
+    fetch('/registration/verify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+    })
+        .then((response) => {
+            if (!response.ok) {
+                return response.text().then((errorMessage) => {
+                    throw new Error(errorMessage);
+                });
+            }
+            return response;
+        })
+        .then(() => {
+            // Redirect to email sent page
+            window.location.href = '/registration/verify/sent?email=' + targetEmail;
+        })
+        .catch((error) => {
+            // Show an error toast message
+            console.error("Error:", error);
+            showToast(
+                "Error",
+                ["bi", "bi-x-circle"],
+                "Error",
+                "red-color",
+                3000,
+                error.message || "Failed to send verification email!"
+            );
+        });
+
 
 }
 

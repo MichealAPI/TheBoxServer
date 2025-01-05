@@ -14,9 +14,12 @@ import org.bson.BsonDocument;
 import org.bson.types.ObjectId;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.core.env.Environment;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,11 +27,13 @@ import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
 import java.io.UnsupportedEncodingException;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
 public class EmailRestController {
 
+    private static final String LOGO_IMAGE = "/static/images/logo.webp";
 
     private final Environment environment;
     private final JavaMailSender mailSender;
@@ -79,15 +84,16 @@ public class EmailRestController {
         String inviteId = inviteIdObj.toHexString();
 
         // Send email
-        sendVerificationEmail(
-                Email.builder()
-                        .targetEmail(user.getEmail())
-                        .targetFullName(user.getFullName())
-                        .subject("Invitation to join course")
-                        .confirmationUrl("http://localhost:8080/api/courses/invite/confirm/" + inviteId + "?courseId=" + courseId)
-                        .template("invite")
-                        .course(course)
-                        .build()
+        sendEmail(new Email(
+                Map.of(
+                        "targetEmail", user.getEmail(),
+                        "fullName", user.getFullName(),
+                        "subject", "Invitation to join course",
+                        "confirmationUrl", "http://localhost:8080/api/courses/invite/confirm/" + inviteId + "?courseId=" + courseId,
+                        "template", "invite",
+                        "course", course
+                    )
+                )
         );
 
         // Add invite to course
@@ -101,7 +107,67 @@ public class EmailRestController {
     }
 
 
-    public void sendVerificationEmail(Email emailDto) throws MessagingException, UnsupportedEncodingException {
+    @PostMapping("/registration/verify")
+    public ResponseEntity<String> verifyUser(@RequestBody String payload) {
+
+        String targetEmail = BsonDocument.parse(payload)
+                .getString("target")
+                .getValue();
+
+        System.out.println("Validation success");
+
+        // Check if user exists
+        User user = userService.getUserByEmail(targetEmail);
+
+        if (user == null) {
+            System.out.println("User not found");
+            return ResponseEntity.badRequest().body("User not found");
+        }
+
+        if(user.isEnabled()) {
+            System.out.println("User is already verified");
+            return ResponseEntity.badRequest().body("User is already verified");
+        }
+
+        // Send verification email
+        ObjectId verificationIdObj = new ObjectId();
+        String verificationId = verificationIdObj.toHexString();
+
+        // Send email
+
+        new Thread(() -> {
+            try {
+                sendEmail(new Email(
+                                Map.of(
+                                        "targetEmail", user.getEmail(),
+                                        "targetFullName", user.getFullName(),
+                                        "subject", "Verify your account",
+                                        "confirmationUrl", "http://localhost:8080/registration/verify?token=" + verificationId + "&username=" + user.getUsername(),
+                                        "template", "verify"
+                                )
+                        )
+                );
+                System.out.println("Email sent");
+
+
+            } catch (MessagingException | UnsupportedEncodingException e) {
+                throw new RuntimeException(e);
+            }
+        }).start();
+
+        // Add verification to user
+        userService.addVerification(
+                user,
+                verificationId
+        );
+
+        System.out.println("Verification added");
+
+        return ResponseEntity.ok().build();
+    }
+
+
+    public void sendEmail(Email emailDto) throws MessagingException, UnsupportedEncodingException {
 
         String mailFrom = environment.getProperty("spring.mail.properties.mail.smtp.from");
         String mailFromName = environment.getProperty("mail.from.name", "TheBox");
@@ -109,19 +175,27 @@ public class EmailRestController {
         final MimeMessage mimeMessage = this.mailSender.createMimeMessage();
         final MimeMessageHelper email = new MimeMessageHelper(mimeMessage, true, "UTF-8");
 
+        Map<String, Object> attributes = emailDto.getData();
+
         // Set email properties
-        email.setTo(emailDto.getTargetEmail());
+        email.setTo(emailDto.getTo());
         email.setSubject(emailDto.getSubject());
         email.setFrom(new InternetAddress(mailFrom, mailFromName));
 
         final Context ctx = new Context(LocaleContextHolder.getLocale());
-        ctx.setVariable("email", emailDto.getTargetEmail());
-        ctx.setVariable("fullName", emailDto.getTargetFullName());
-        ctx.setVariable("url", emailDto.getConfirmationUrl());
-        ctx.setVariable("course", emailDto.getCourse());
+
+        for (Map.Entry<String, Object> entry : attributes.entrySet()) {
+            ctx.setVariable(entry.getKey(), entry.getValue());
+        }
+
+        ctx.setVariable("logoImage", LOGO_IMAGE);
 
         final String htmlContent = this.htmlTemplateEngine.process(emailDto.getTemplate(), ctx);
         email.setText(htmlContent, true);
+
+        ClassPathResource clr = new ClassPathResource(LOGO_IMAGE);
+
+        email.addInline("logoImage", clr, "image/webp");
 
         mailSender.send(mimeMessage);
 
