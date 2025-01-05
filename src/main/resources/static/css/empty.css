@@ -8,6 +8,6 @@
 
 .empty .icon img {
     width: 200px;
-    height: fit-content; 
+    height: auto;
     user-select: none;
 }

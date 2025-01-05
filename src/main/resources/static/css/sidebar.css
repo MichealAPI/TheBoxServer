@@ -29,7 +29,7 @@
 
 .sidebar .wrapper .sidebar-header .logo img {
     width: 40px;
-    height: fit-content;
+    height: auto;
 
     user-select: none;
     

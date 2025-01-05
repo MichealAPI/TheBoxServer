@@ -15,30 +15,27 @@ const sections = [
         id: '1',
         name: 'first-section',
         inputs: [
-            { id: 'email', type: 'email', icon: 'bi bi-envelope', label: 'Email', placeholder: 'Enter your Email', required: true },
-            { id: 'password', type: 'password', icon: 'bi bi-key', label: 'Password', placeholder: 'Enter your Password', required: true },
-            { id: 'confirmPassword', type: 'password', icon: 'bi bi-key', label: 'Confirm Password', placeholder: 'Re-enter your Password', required: true },
+            { id: 'email', type: 'email', icon: 'bi bi-envelope', label: 'Email', placeholder: 'Enter your Email', required: true, non_alphanumeric: true },
+            { id: 'password', type: 'password', icon: 'bi bi-key', label: 'Password', placeholder: 'Enter your Password', required: true, non_alphanumeric: true },
+            { id: 'confirmPassword', type: 'password', icon: 'bi bi-key', label: 'Confirm Password', placeholder: 'Re-enter your Password', required: true, non_alphanumeric: true },
         ],
     },
     {
         id: '2',
         name: 'second-section',
         inputs: [
-            { id: 'firstName', type: 'text', label: 'First Name', placeholder: 'Enter your first name', icon: 'bi bi-person', required: true },
-            { id: 'lastName', type: 'text', label: 'Last Name', placeholder: 'Enter your last name', icon: 'bi bi-person', required: true },
-            { id: 'username', type: 'text', label: 'Username', placeholder: 'Enter your username', icon: 'bi bi-hash', required: true },
+            { id: 'firstName', type: 'text', label: 'First Name', placeholder: 'Enter your first name', icon: 'bi bi-person', required: true, non_alphanumeric: false },
+            { id: 'lastName', type: 'text', label: 'Last Name', placeholder: 'Enter your last name', icon: 'bi bi-person', required: true, non_alphanumeric: false },
+            { id: 'username', type: 'text', label: 'Username', placeholder: 'Enter your username', icon: 'bi bi-hash', required: true, non_alphanumeric: false },
         ],
     },
 ];
 
 function checkFieldsValidity() {
-
     warning.innerText = '';
-
     const section = sections.find(sec => sec.id === `${state.currentSection}`);
     let allValid = true;
 
-    // Email and password fields for extra validation
     const passwordFields = section.inputs.filter(input => input.type === 'password');
     const passwords = [];
 
@@ -46,46 +43,68 @@ function checkFieldsValidity() {
         const inputField = document.querySelector(`#${input.id}`);
         inputField.value = inputField.value.trim();
 
+        // Basic required field validation
         if (input.required && !inputField.value) {
-            inputField.classList.add('invalid');
+            markInvalid(inputField, 'This field is required');
             allValid = false;
         } else {
-            inputField.classList.remove('invalid');
+            markValid(inputField);
         }
 
-        // Additional validation for email
-        if (input.type === 'email') {
-            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailPattern.test(inputField.value)) {
-                warning.innerText = `Invalid email format: ${inputField.value}`;
-                inputField.classList.add('invalid');
+        // Specific type validations
+        if (input.type === 'email' && inputField.value) {
+            if (!isValidEmail(inputField.value)) {
+                markInvalid(inputField, `Invalid email format: ${inputField.value}`);
                 allValid = false;
             }
         }
 
-        // Collect password values for comparison
         if (input.type === 'password') {
             passwords.push(inputField.value);
-        }
-
-        // Check if the username contains special characters
-        if (input.id === 'username') {
-            const usernamePattern = /^[a-zA-Z0-9]+$/;
-            if (!usernamePattern.test(inputField.value)) {
-                warning.innerText = 'Username must contain only alphanumeric characters!';
-                inputField.classList.add('invalid');
+            if (input.non_alphanumeric && hasNonAlphanumeric(inputField.value)) {
+                markInvalid(inputField, 'Password cannot contain non-alphanumeric characters');
                 allValid = false;
             }
+        }
+
+        if (input.id === 'username' && inputField.value) {
+            if (!/^[a-zA-Z0-9]+$/.test(inputField.value)) {
+                markInvalid(inputField, 'Username must contain only alphanumeric characters');
+                allValid = false;
+            }
+        }
+
+        if (input.non_alphanumeric === false && hasNonAlphanumeric(inputField.value)) {
+            markInvalid(inputField, `${input.label} must not contain non-alphanumeric characters`);
+            allValid = false;
         }
     });
 
-    // Check if all password fields matches
+    // Password match validation
     if (passwordFields.length > 1 && new Set(passwords).size !== 1) {
         warning.innerText = 'Passwords do not match!';
         allValid = false;
     }
 
     return allValid;
+}
+
+function markInvalid(inputField, message) {
+    inputField.classList.add('invalid');
+    warning.innerText = message;
+}
+
+function markValid(inputField) {
+    inputField.classList.remove('invalid');
+}
+
+function isValidEmail(email) {
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailPattern.test(email);
+}
+
+function hasNonAlphanumeric(value) {
+    return /[^a-zA-Z0-9]/.test(value);
 }
 
 function createInputHTML({ type, icon, label, placeholder, id, required }) {
@@ -125,7 +144,7 @@ function injectSection(sectionId, transitionDuration = defaultTransitionDuration
         fragment.appendChild(wrapper.firstElementChild);
     });
 
-    inputGroup.style.opacity = 0;
+    inputGroup.style.opacity = '0';
 
     setTimeout(() => {
         inputGroup.innerHTML = '';
@@ -134,7 +153,7 @@ function injectSection(sectionId, transitionDuration = defaultTransitionDuration
         state.currentSection = sectionId;
         restoreData(section);
 
-        inputGroup.style.opacity = 1;
+        inputGroup.style.opacity = '1';
 
         //if (transitionDuration === 0) { // Initial load
         //    addPasswordToggleListeners();
