@@ -4,6 +4,15 @@
 
 ---
 
+## Test Credentials
+
+Use the following test credentials to explore the application:
+
+- **Email**: `andrew.kosatka@gmail.com`
+- **Password**: `test`
+
+---
+
 ## Key Features
 
 - **Proposals and Voting**:  
@@ -204,15 +213,6 @@ See more at [Llama](https://www.llama.com/)
             })
         });
 ```
-
----
-
-## Test Credentials
-
-Use the following test credentials to explore the application:
-
-- **Email**: `andrew.kosatka@gmail.com`
-- **Password**: `test`
 
 ---
 
