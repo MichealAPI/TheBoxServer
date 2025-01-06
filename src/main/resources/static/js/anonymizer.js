@@ -1,6 +1,7 @@
 
 const anonymousSwitcher = document.getElementById('anonymousSwitcher');
 const icon = document.getElementById('switcher-icon');
+const statusParagraph = document.getElementById('anonymizeStatus');
 
 let status = anonymousSwitcher.getAttribute('data-checked');
 
@@ -16,6 +17,8 @@ anonymousSwitcher.addEventListener('click', (e) => {
 
     anonymousSwitcher.classList.toggle('bg-green');
     anonymousSwitcher.classList.toggle('bg-black');
+
+    statusParagraph.innerText = statusParagraph.innerText === 'ANONYMIZE' ? 'REVEAL' : 'ANONYMIZE';
 
     icon.classList.toggle('bi-person-fill-x');
     icon.classList.toggle('bi-person-fill');

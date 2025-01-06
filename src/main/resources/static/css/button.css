@@ -113,3 +113,7 @@ button.toolbar-btn {
     transition-property: filter;
     transition-duration: .3s;
 }
+
+.ease-in-out {
+    transition: width 0.3s ease-in-out, filter 0.3s;
+}
