@@ -30,8 +30,13 @@
     /** margin-left: 20px; **/
     display: flex;
     flex-direction: column;
+}
 
-    
+.dark-mode .banner .header .title h1,
+.dark-mode .banner .header .subtitle p,
+.dark-mode .banner .counter .number p,
+.dark-mode .banner .counter .icon i {
+    color: rgba(var(--light-gray));
 }
 
 .banner .header .title h1 {

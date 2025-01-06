@@ -33,9 +33,8 @@
 
 .input-wrapper .actions-wrapper {
     display: flex;
-    column-gap: 20px;
-
-    margin-left: auto;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .input-wrapper .actions-wrapper .send-button button {

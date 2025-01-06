@@ -34,6 +34,8 @@ public class User implements UserDetails {
 
     private List<Course> courses;
 
+    private Map<String, Object> settings;
+
     private Collection<? extends GrantedAuthority> authorities;
 
     public User(BsonDocument document) {
@@ -69,6 +71,34 @@ public class User implements UserDetails {
     public String getFullName() {
         return StringUtil.capitalize(firstName) + " " + StringUtil.capitalize(lastName);
     }
+
+    /**
+     * Processes and returns a map of parsed settings, combining the default settings
+     * with raw settings provided in the instance. The method ensures that default settings
+     * are updated with the corresponding values from the raw settings if available.
+     *
+     * @return a map containing the parsed settings where each setting is updated with its corresponding value.
+     */
+    public Map<String, Setting> getParsedSettings() { // Todo: Cache the parsed settings
+        // Clone the default settings into a new map
+        Map<String, Setting> parsedSettings = new HashMap<>(Setting.DEFAULT_SETTINGS);
+
+        // Iterate over this instance's raw settings
+        if (this.settings != null) {
+            for (Map.Entry<String, Object> rawSetting : this.settings.entrySet()) {
+                if (parsedSettings.containsKey(rawSetting.getKey())) {
+                    // Get the default setting and update its value
+                    Setting setting = parsedSettings.get(rawSetting.getKey());
+                    if (setting != null) {
+                        setting.setValue(rawSetting.getValue());
+                    }
+                }
+            }
+        }
+
+        return parsedSettings;
+    }
+
 
     @Override
     public boolean isAccountNonExpired() {

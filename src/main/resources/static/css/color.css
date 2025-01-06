@@ -13,6 +13,24 @@
     --black: #000; 
 }
 
+.dark-mode {
+    --primary: #000;
+    --light-gray: #2A2A2A;
+    --gray: #3A3A3A;
+    --dark-gray: #555;
+    --secondary: 198, 202, 220;
+    --green: #1AB47F;
+    --red: #D46A6C;
+    --purple: #C76ACF;
+    --light-blue: #3D91E6;
+    --blue: #3072A9;
+    --black: #FFF;
+}
+
+.bg-light-gray {
+    background: var(--light-gray);
+}
+
 .gray-color {
     color: var(--gray);
 }

@@ -16,3 +16,7 @@
     color: var(--primary);
     font-size: 18px;
 }
+
+.dark-mode .avatar .letter p {
+    color: rgba(var(--secondary));
+}

@@ -37,7 +37,7 @@
 
 .sidebar .wrapper .sidebar-header .brand h1 {
     font-size: 24px;
-    color: var(--secondary);
+    color: rgba(var(--secondary));
     margin: 0;
 }
 
@@ -88,7 +88,7 @@
 
 .sidebar .wrapper .account .info .name p {
     font-size: 18px;
-    color: var(--secondary);
+    color: rgba(var(--secondary));
     margin: 0;
     line-height: 1;
 }

@@ -18,7 +18,7 @@
     <link rel="preload" th:href="@{/images/banner.webp}" as="image">
 </head>
 
-<body>
+<body class="dark-mode bg-light-gray">
 
     <div id="navbar" th:insert="fragments/navbar :: #navbar(userInitial=${userInitial})"></div>
     <div id="sidebar" th:insert="fragments/sidebar :: #sidebar(userInitial=${userInitial}, firstName=${firstName}, lastName=${lastName}, username=${username})"></div>
@@ -46,7 +46,7 @@
                 <div class="footer">
                     <div class="counter">
                         <div class="number">
-                            <p class="phantom-bold vote-count" th:text="${idea.calculateVotes()}">[Likes]</p>
+                            <p class="phantom-bold vote-count" th:text="${idea.calculateVotes()}">[Likes]</p>  
                         </div>
 
                         <div class="icon">
@@ -91,24 +91,22 @@
 
             <div class="actions-wrapper">
 
-                <div class="anonymous-switcher general-btn ease-in-out" data-checked="false">
-                    <button class="bg-green rounded h-100" id="anonymousSwitcher">
+                <div class="d-flex align-items-center gap-2">
 
-                        <div class="d-flex align-items-center gap-2">
+                    <p class="phantom-medium secondary-color fs-medium m-0">
+                        Anonymize?
+                    </p>
 
-                            <div class="icon ms-2">
-                                <i class="bi bi-person-fill" id="switcher-icon"></i>
-                            </div>
+                    <label class="switch" id="anonymousSwitcher"> <!-- id="anonymousSwitcher" class="anonymous-switcher"-->
+                        <input type="checkbox">
+                        <span class="slider round"></span>
+                    </label>
 
-                            <div class="text text-center me-2">
-                                <p class="phantom-bold m-0 primary-color fs-medium lh-sm" id="anonymizeStatus">ANONYMIZE</p>
-                                <p class="phantom-regular m-0 primary-color fs-small lh-sm">(Click to toggle)</p>
-                            </div>
-
-                        </div>
-
-
+                    <button type="button" class="outline-transparent bg-transparent" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="The anonymizer rewrites comments neutrally and hides the profile picture and username using AI">
+                        <i class="bi bi-info-circle fs-medium secondary-color"></i>
                     </button>
+
+
                 </div>
 
                 <div class="send-button">
@@ -180,6 +178,7 @@
     <script th:src="@{/js/vote.js}"></script>
     <script th:src="@{/js/comment.js}"></script>
     <script th:src="@{/js/anonymizer.js}"></script>
+    <script th:src="@{/js/tooltip.js}"></script>
 
 </body>
 

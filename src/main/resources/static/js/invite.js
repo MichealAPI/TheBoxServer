@@ -99,4 +99,24 @@ document.getElementById("submitInvite").addEventListener("click", function () {
                 error.message || "Failed to send invitation!"
             );
         });
-});
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+nMBazlpP

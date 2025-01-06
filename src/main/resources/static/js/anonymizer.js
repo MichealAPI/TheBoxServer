@@ -1,34 +1,21 @@
 
 const anonymousSwitcher = document.getElementById('anonymousSwitcher');
 const icon = document.getElementById('switcher-icon');
-const statusParagraph = document.getElementById('anonymizeStatus');
 
-let status = anonymousSwitcher.getAttribute('data-checked');
-
-anonymousSwitcher.addEventListener('click', (e) => {
+anonymousSwitcher.addEventListener('change', (e) => {
     const commentInput = document.getElementById('commentInput');
-    status = status === 'true' ? 'false' : 'true';
 
-    if (status === 'true') {
+    console.log("Should be working!");
+
+    if (e.currentTarget.checked) {
         commentInput.setAttribute('placeholder', 'Write a comment as an anonymous user');
     } else {
         commentInput.setAttribute('placeholder', 'Write a comment...');
     }
-
-    anonymousSwitcher.classList.toggle('bg-green');
-    anonymousSwitcher.classList.toggle('bg-black');
-
-    statusParagraph.innerText = statusParagraph.innerText === 'ANONYMIZE' ? 'REVEAL' : 'ANONYMIZE';
-
-    icon.classList.toggle('bi-person-fill-x');
-    icon.classList.toggle('bi-person-fill');
-
-    anonymousSwitcher.setAttribute('data-checked', status);
-
-})
+});
 
 function isAnonymous() {
-    return status === 'true';
+    return anonymousSwitcher.checked;
 }
 
 async function anonymize(text) {
