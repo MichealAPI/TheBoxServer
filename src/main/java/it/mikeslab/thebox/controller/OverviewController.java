@@ -3,7 +3,7 @@ package it.mikeslab.thebox.controller;
 import it.mikeslab.thebox.entity.Course;
 import it.mikeslab.thebox.entity.User;
 import it.mikeslab.thebox.service.CourseService;
-import it.mikeslab.thebox.service.SettingsService;
+import it.mikeslab.thebox.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class OverviewController {
 
     private final CourseService courseService;
-    private final SettingsService settingsService;
+    private final UserService userService;
 
     @GetMapping("/overview")
     public String overviewPage(@RequestParam String courseId, Model model, User user) {
@@ -23,6 +23,9 @@ public class OverviewController {
         if (user == null) {
             return "redirect:/login";
         }
+
+        // Get updated user instance
+        user = userService.getUserByUsername(user.getUsername());
 
         model.addAllAttributes(user.toMap());
         model.addAttribute("userInitial", user.getUsername().charAt(0));

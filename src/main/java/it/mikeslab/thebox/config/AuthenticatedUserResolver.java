@@ -18,16 +18,9 @@ public class AuthenticatedUserResolver implements HandlerMethodArgumentResolver 
 
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
-        System.out.println("RESOLVING USER");
-
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-        System.out.println("AUTH PRINCIPAL: " + auth.getPrincipal());
-
         Object objUser = (auth != null) ? auth.getPrincipal() :  null;
-
-        System.out.println("AUTHENTICATED USER RESOLVER: " + objUser);
-        System.out.println("AUTH PRINCIPAL: " + auth.getPrincipal());
 
         if (objUser instanceof User user) {
             return user;

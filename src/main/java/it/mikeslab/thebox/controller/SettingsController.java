@@ -2,19 +2,17 @@ package it.mikeslab.thebox.controller;
 
 import it.mikeslab.thebox.entity.Setting;
 import it.mikeslab.thebox.entity.User;
-import it.mikeslab.thebox.service.SettingsService;
+import it.mikeslab.thebox.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import java.util.Map;
-
 @Controller
 @RequiredArgsConstructor
 public class SettingsController {
 
-    private final SettingsService settingsService;
+    private final UserService userService;
 
     @GetMapping("/settings")
     public String settingsPage(Model model, User user) {
@@ -23,15 +21,20 @@ public class SettingsController {
             return "redirect:/login";
         }
 
-        model.addAllAttributes(user.toMap());
+        // Get updated user instance
+        user = userService.getUserByUsername(user.getUsername());
 
-        // Both non-set and set settings
-        Map<String, Setting> parsedSettings = user.getParsedSettings();
+        model.addAllAttributes(user.toMap());
 
         // Add settings
         model.addAttribute(
                 "settings",
-                parsedSettings
+                user.getParsedSettings()
+        );
+
+        model.addAttribute(
+                "settingDetails",
+                Setting.DEFAULT_SETTINGS
         );
 
         // Add user initial

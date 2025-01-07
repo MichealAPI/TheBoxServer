@@ -114,18 +114,14 @@ public class EmailRestController {
                 .getString("target")
                 .getValue();
 
-        System.out.println("Validation success");
-
         // Check if user exists
         User user = userService.getUserByEmail(targetEmail);
 
         if (user == null) {
-            System.out.println("User not found");
             return ResponseEntity.badRequest().body("User not found");
         }
 
         if(user.isEnabled()) {
-            System.out.println("User is already verified");
             return ResponseEntity.badRequest().body("User is already verified");
         }
 
@@ -147,7 +143,6 @@ public class EmailRestController {
                                 )
                         )
                 );
-                System.out.println("Email sent");
 
 
             } catch (MessagingException | UnsupportedEncodingException e) {
@@ -160,8 +155,6 @@ public class EmailRestController {
                 user,
                 verificationId
         );
-
-        System.out.println("Verification added");
 
         return ResponseEntity.ok().build();
     }

@@ -61,6 +61,8 @@ public class User implements UserDetails {
         map.put("email", email);
         map.put("firstName", StringUtil.capitalize(firstName));
         map.put("lastName", StringUtil.capitalize(lastName));
+
+        // todo add also settings here!
         return map;
     }
 
@@ -79,26 +81,20 @@ public class User implements UserDetails {
      *
      * @return a map containing the parsed settings where each setting is updated with its corresponding value.
      */
-    public Map<String, Setting> getParsedSettings() { // Todo: Cache the parsed settings
+    public Map<String, Object> getParsedSettings() { // Todo: Cache the parsed settings
         // Clone the default settings into a new map
-        Map<String, Setting> parsedSettings = new HashMap<>(Setting.DEFAULT_SETTINGS);
+        Map<String, Object> parsedSettings = new HashMap<>(Setting.DEFAULT_SETTINGS);
 
         // Iterate over this instance's raw settings
-        if (this.settings != null) {
-            for (Map.Entry<String, Object> rawSetting : this.settings.entrySet()) {
-                if (parsedSettings.containsKey(rawSetting.getKey())) {
-                    // Get the default setting and update its value
-                    Setting setting = parsedSettings.get(rawSetting.getKey());
-                    if (setting != null) {
-                        setting.setValue(rawSetting.getValue());
-                    }
-                }
-            }
+        if(this.settings == null) {
+            return parsedSettings;
         }
+
+        // Update the parsed settings with the corresponding value
+        parsedSettings.putAll(this.settings);
 
         return parsedSettings;
     }
-
 
     @Override
     public boolean isAccountNonExpired() {

@@ -3,10 +3,12 @@ package it.mikeslab.thebox.entity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.util.Map;
 
 @Getter
+@ToString
 @AllArgsConstructor
 public class Setting {
 
@@ -23,6 +25,18 @@ public class Setting {
         return Map.of(
             "DARK_MODE", new Setting("Dark Mode", "Toggle dark mode", "boolean", "false")
         );
+    }
+
+    public String getValueAsString() {
+        return value.toString();
+    }
+
+    public boolean getValueAsBoolean() {
+        return (boolean) value;
+    }
+
+    public int getValueAsInt() {
+        return (int) value;
     }
 
 

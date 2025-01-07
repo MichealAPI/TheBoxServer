@@ -1,13 +1,12 @@
 package it.mikeslab.thebox.service;
 
 import it.mikeslab.thebox.entity.Setting;
-import it.mikeslab.thebox.entity.Settings;
 import it.mikeslab.thebox.entity.User;
-import it.mikeslab.thebox.repository.SettingsRepository;
 import it.mikeslab.thebox.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @Service
@@ -32,31 +31,24 @@ public class SettingsService {
         return user.getSettings();
     }
 
-    // todo Optimize!
     public void updateSettings(String username, Map<String, Object> updatedSettings) {
 
         User user = userService.getUserByUsername(username);
 
-        Map<String, Setting> parsedSettings = user.getParsedSettings();
+        Map<String, Object> current = user.getSettings();
 
-        for (Map.Entry<String, Object> entry : updatedSettings.entrySet()) {
-            if (parsedSettings.containsKey(entry.getKey())) {
-                Setting setting = parsedSettings.get(entry.getKey());
-                setting.setValue(entry.getValue());
-            }
+        if(current == null) {
+            current = new HashMap<>();
         }
 
-        Map<String, Object> updated = new Settings().fromParsedSettings(parsedSettings, username);
+        // Update the settings
+        current.putAll(updatedSettings); // Replace the current settings with the updated settings
 
-        settingsRepository.save(updated); // TODO Finish up translation
+        user.setSettings(current);
+
+        userRepository.save(user); // TODO Finish up translation
 
     }
 
-
-
-
-    public void deleteSettings(String username) {
-        settingsRepository.delete(settingsRepository.findSettingsByUsername(username));
-    }
 
 }

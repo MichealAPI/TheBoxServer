@@ -18,7 +18,7 @@
     <link rel="preload" th:href="@{/images/banner.webp}" as="image">
 </head>
 
-<body class="dark-mode bg-light-gray">
+<body class="bg-light-gray" th:classappend="${settings.get('DARK_MODE').toString()} == 'true' ? 'dark-mode' : ''">
 
     <div id="navbar" th:insert="fragments/navbar :: #navbar(userInitial=${userInitial})"></div>
     <div id="sidebar" th:insert="fragments/sidebar :: #sidebar(userInitial=${userInitial}, firstName=${firstName}, lastName=${lastName}, username=${username})"></div>
@@ -46,7 +46,7 @@
                 <div class="footer">
                     <div class="counter">
                         <div class="number">
-                            <p class="phantom-bold vote-count" th:text="${idea.calculateVotes()}">[Likes]</p>  
+                            <p class="phantom-bold vote-count" th:text="${idea.calculateVotes()}">[Likes]</p>
                         </div>
 
                         <div class="icon">
