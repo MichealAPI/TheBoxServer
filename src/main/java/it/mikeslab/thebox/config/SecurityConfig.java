@@ -47,7 +47,7 @@ public class SecurityConfig {
                 // Exclude static resources from security filters
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/static/**", "/js/**", "/videos/**", "/images/**", "/components/**", "/css/**").permitAll() // Permit all access to static resources
-                        .requestMatchers("/", "/login", "/register", "/api/**", "/registration/verify/**", "/registration/verify", "/registration/**").permitAll()
+                        .requestMatchers("/", "/login", "/register", "/api/**", "/error", "/registration/verify/**", "/registration/verify", "/registration/**").permitAll()
                         .anyRequest().authenticated() // All other requests require authentication
                 )
                 // Configure custom login page
