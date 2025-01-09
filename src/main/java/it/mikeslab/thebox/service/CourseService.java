@@ -114,6 +114,30 @@ public class CourseService {
         return course != null && course.getIdeas() != null;
     }
 
+    public void uploadFile(String referenceId, String field, String binaryData) {
+
+        Course course = fetchCourseById(referenceId);
+
+        if (course != null) {
+            course.getSettings().put(field, binaryData);
+            courseRepository.save(course);
+        }
+
+    }
+
+    public void uploadIdeaFile(String courseId, String ideaId, String field, String binaryData) {
+
+        Course course = fetchCourseById(courseId);
+
+        if (course != null) {
+            Idea idea = course.getIdeas().get(ideaId);
+            if (idea != null) {
+                idea.getSettings().put(field, binaryData);
+                courseRepository.save(course);
+            }
+        }
+    }
+
     private IdeaDTO mapIdeaToDTO(Idea idea, String courseId) {
         User author = userService.getUserByUsername(idea.getAuthorUsername());
         if (author == null) {

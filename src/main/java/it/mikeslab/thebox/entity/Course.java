@@ -33,6 +33,8 @@ public class Course {
 
     private Map<String, String> invites; // Usernames of users invited to join the course
 
+    private Map<String, String> settings; // Individual. Also contains eventual wallpaper, etc.
+
     public String formattedTimestamp() {
         return StringUtil.formatTimestamp(timestamp);
     }

@@ -25,6 +25,8 @@ public class Idea {
 
     private List<Comment> comments;
 
+    private Map<String, String> settings; // Individual. Also contains eventual wallpaper, etc.
+
     public Idea(String name, String details, String authorUsername, Map<String, Vote> votes) {
         this.name = name;
         this.details = details;
