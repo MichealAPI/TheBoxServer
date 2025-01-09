@@ -44,8 +44,8 @@
                                 <div class="d-none d-md-block general-btn">
                                     <button type="button" class="bg-primary rounded outline-transparent" data-bs-toggle="modal" data-bs-target="#courseModal">
                                         <div class="d-flex justify-content-between align-items-center p-1 pe-2 ps-2">
-                                            <p class="phantom-regular primary-color m-0 ps-2">Idea</p>
-                                            <i class="bi bi-plus m-0 fs-3 primary-color ps-1"></i>
+                                            <p class="phantom-regular secondary-color m-0 ps-2">Idea</p>
+                                            <i class="bi bi-plus m-0 fs-3 secondary-color ps-1"></i>
                                         </div>
                                     </button>
                                 </div>
@@ -53,8 +53,8 @@
                                 <div class="d-none d-md-block general-btn" th:if="${course.getOwnerUsername() == username}">
                                     <button type="button" class="bg-green rounded outline-transparent">
                                         <div class="d-flex justify-content-between align-items-center p-1 pe-2 ps-2" data-bs-toggle="modal" data-bs-target="#inviteModal">
-                                            <p class="phantom-regular primary-color m-0 ps-2">Invite</p>
-                                            <i class="bi bi-person-fill-add m-0 fs-3 primary-color ps-1"></i>
+                                            <p class="phantom-regular secondary-color m-0 ps-2">Invite</p>
+                                            <i class="bi bi-person-fill-add m-0 fs-3 secondary-color ps-1"></i>
                                         </div>
                                     </button>
                                 </div>
@@ -153,29 +153,29 @@
 
     <div class="modal fade" id="courseModal" tabindex="-1" aria-labelledby="courseModalLabel" aria-hidden="true">
         <div class="modal-dialog">
-            <div class="modal-content">
+            <div class="modal-content bg-light-gray">
                 <div class="modal-header">
-                    <h5 class="modal-title phantom-medium" id="courseModalLabel">New Idea</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <h5 class="modal-title phantom-medium secondary-color" id="courseModalLabel">New Idea</h5>
+                    <button type="button" class="btn-close secondary-color" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <form>
                         <div class="mb-3">
-                            <label for="ideaName" class="col-form-label phantom-medium">Name:</label>
+                            <label for="ideaName" class="col-form-label secondary-color phantom-medium">Name:</label>
                             <input type="text" class="form-control" id="ideaName">
                         </div>
                         <div class="mb-3">
-                            <label for="ideaDetails" class="col-form-label phantom-medium">Details:</label>
+                            <label for="ideaDetails" class="col-form-label secondary-color phantom-medium">Details:</label>
                             <textarea class="form-control" id="ideaDetails"></textarea>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
                     <div class="general-btn">
-                        <button type="button" class="rounded bg-red pt-2 pb-2 ps-3 pe-3 phantom-medium" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="rounded bg-red pt-2 pb-2 ps-3 pe-3 secondary-color phantom-medium" data-bs-dismiss="modal">Close</button>
                     </div>
                     <div class="general-btn">
-                        <button type="button" id="submitIdea" class="rounded bg-primary pt-2 pb-2 ps-3 pe-3 phantom-medium" data-bs-dismiss="modal">Suggest</button>
+                        <button type="button" id="submitIdea" class="rounded bg-primary secondary-color pt-2 pb-2 ps-3 pe-3 phantom-medium" data-bs-dismiss="modal">Suggest</button>
                     </div>
                 </div>
             </div>
@@ -185,25 +185,25 @@
 
     <div class="modal fade" id="inviteModal" th:if="${course.getOwnerUsername() == username}" th:data-course-id="${course.getId()}" tabindex="-1" aria-labelledby="inviteModalLabel" aria-hidden="true">
         <div class="modal-dialog">
-            <div class="modal-content">
+            <div class="modal-content bg-light-gray">
                 <div class="modal-header">
-                    <h5 class="modal-title phantom-medium" id="inviteModalLabel">Invite</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <h5 class="modal-title secondary-color phantom-medium" id="inviteModalLabel">Invite</h5>
+                    <button type="button" class="btn-close secondary-color" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <form>
                         <div class="mb-3">
-                            <label for="targetEmail" class="col-form-label phantom-medium">Who are you inviting?</label>
+                            <label for="targetEmail" class="col-form-label secondary-color phantom-medium">Who are you inviting?</label>
                             <input type="email" class="form-control" id="targetEmail">
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
                     <div class="general-btn">
-                        <button type="button" class="rounded bg-red pt-2 pb-2 ps-3 pe-3 phantom-medium" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="rounded bg-red pt-2 pb-2 ps-3 pe-3 secondary-color phantom-medium" data-bs-dismiss="modal">Close</button>
                     </div>
                     <div class="general-btn">
-                        <button type="button" id="submitInvite" class="rounded bg-green pt-2 pb-2 ps-3 pe-3 phantom-medium" data-bs-dismiss="modal">Invite</button>
+                        <button type="button" id="submitInvite" class="rounded bg-green secondary-color pt-2 pb-2 ps-3 pe-3 phantom-medium" data-bs-dismiss="modal">Invite</button>
                     </div>
                 </div>
             </div>
@@ -220,7 +220,7 @@
                 </div>
                 <strong class="me-auto" id="toastTitle"></strong>
                 <small id="toastSmallText"></small>
-                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                <button type="button" class="btn-close secondary-color" data-bs-dismiss="toast" aria-label="Close"></button>
             </div>
             <div class="toast-body" id="toastBody">
             </div>

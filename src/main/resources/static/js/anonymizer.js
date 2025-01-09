@@ -1,13 +1,12 @@
 
 const anonymousSwitcher = document.getElementById('anonymousSwitcher');
+const anonymousCheckbox = document.getElementById('anonymousCheckbox');
 const icon = document.getElementById('switcher-icon');
 
 anonymousSwitcher.addEventListener('change', (e) => {
     const commentInput = document.getElementById('commentInput');
 
-    console.log("Should be working!");
-
-    if (e.currentTarget.checked) {
+    if (e.target.checked) {
         commentInput.setAttribute('placeholder', 'Write a comment as an anonymous user');
     } else {
         commentInput.setAttribute('placeholder', 'Write a comment...');
@@ -15,7 +14,7 @@ anonymousSwitcher.addEventListener('change', (e) => {
 });
 
 function isAnonymous() {
-    return anonymousSwitcher.checked;
+    return anonymousCheckbox.checked;
 }
 
 async function anonymize(text) {
