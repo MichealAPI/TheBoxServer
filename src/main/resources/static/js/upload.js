@@ -2,7 +2,14 @@ const uploadAreas = document.querySelectorAll('.upload-area');
 
 uploadAreas.forEach(uploadArea => {
 
+    apply(uploadArea);
+
     uploadArea.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        uploadArea.classList.add('active');
+    });
+
+    uploadArea.addEventListener('drop', (e) => {
         e.preventDefault();
 
         // Get dragged file data
@@ -38,7 +45,7 @@ uploadAreas.forEach(uploadArea => {
             }
 
             // Upload the image
-            uploadArea(
+            upload(
                 targetCategory,
                 targetId,
                 field,
@@ -46,8 +53,6 @@ uploadAreas.forEach(uploadArea => {
                 nestedReferenceId
             );
         };
-
-
 
     });
 
@@ -67,3 +72,64 @@ function upload(targetCategory, targetId, field, binary, nestedReferenceId) {
         body: formData
     });
 }
+
+function download(targetCategory, targetId, field, nestedReferenceId) {
+
+    const formData = createForm(targetId, field, nestedReferenceId);
+
+    return fetch(`/download/${targetCategory}`, {
+        method: 'GET',
+        body: formData
+    });
+}
+
+
+function createForm(category, targetId, field, nestedReferenceId) {
+    const formData = new FormData();
+    formData.append("category", category)
+    formData.append('targetId', targetId);
+    formData.append('field', field);
+    if (nestedReferenceId != null) {
+        formData.append('nestedReferenceId', nestedReferenceId);
+    }
+
+    return formData;
+}
+
+
+function apply(element) {
+
+    const targetCategory = element.getAttribute('data-category');
+    const targetId = element.getAttribute('data-id');
+    const field = element.getAttribute('data-field');
+    const nestedReferenceId = element.getAttribute('data-nested-reference-id');
+    const defaultImage = element.getAttribute('data-default-image');
+
+    download(targetCategory, targetId, field, nestedReferenceId)
+        .then(response => {
+            console.log(response);
+        })
+        .then(data => {
+            console.log(data);
+
+            const binary = data.binary;
+            const base64 = decodeBase64(binary);
+
+            element.style.backgroundImage = `url(${base64})`;
+
+            console.log('Image downloaded');
+            console.log(base64);
+
+        }).catch(() => {
+            element.style.backgroundImage = `url(${defaultImage})`;
+
+            console.log('Image not found');
+
+            console.log(defaultImage);
+        });
+}
+
+function decodeBase64(base64) {
+    return atob(base64);
+}
+

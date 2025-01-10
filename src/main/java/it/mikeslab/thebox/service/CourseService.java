@@ -138,6 +138,7 @@ public class CourseService {
         }
     }
 
+
     private IdeaDTO mapIdeaToDTO(Idea idea, String courseId) {
         User author = userService.getUserByUsername(idea.getAuthorUsername());
         if (author == null) {

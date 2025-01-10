@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -34,6 +35,7 @@ public class Idea {
         this.votes = votes;
         this.timestamp = System.currentTimeMillis();
         this.comments = List.of();
+        this.settings = new HashMap<>();
     }
 
     public String formattedTimestamp() {

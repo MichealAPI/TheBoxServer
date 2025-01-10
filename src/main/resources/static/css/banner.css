@@ -5,7 +5,8 @@
     max-width: 740px;
     min-height: 210px;
 
-    background: url("../images/banner.webp"), no-repeat;
+    /* Now using custom background given by Settings
+    background: url("../images/banner.webp"), no-repeat; */
     background-size: cover;
 
 

@@ -1,0 +1,13 @@
+.upload-area.active {
+    border: 3px dashed var(--green);
+    background-color: var(--primary);
+
+    opacity: 0.9;
+}
+
+.upload-area.invalid {
+    border: 3px dashed var(--red);
+    background-color: var(--primary);
+
+    opacity: 0.9;
+}

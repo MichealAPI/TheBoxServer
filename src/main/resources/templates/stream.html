@@ -31,7 +31,13 @@
             </a>
         </div>
 
-        <div class="banner banner-bg" th:id="'idea-'+${idea.getId()}">
+        <div class="banner upload-area" th:id="'idea-'+${idea.getId()}"
+             data-category="idea"
+             th:data-id="${course.getId()}"
+             th:data-default-image="@{/images/banner.webp}"
+             data-field="banner-bg"
+             th:data-nested-reference-id="${idea.getId()}">
+
             <div class="wrapper">
 
                 <div class="header">
@@ -179,6 +185,7 @@
     <script th:src="@{/js/comment.js}"></script>
     <script th:src="@{/js/anonymizer.js}"></script>
     <script th:src="@{/js/tooltip.js}"></script>
+    <script th:src="@{/js/upload.js}"></script>
 
 </body>
 
