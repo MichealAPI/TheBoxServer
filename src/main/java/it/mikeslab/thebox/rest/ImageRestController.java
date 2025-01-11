@@ -99,6 +99,8 @@ public class ImageRestController {
             return ResponseEntity.badRequest().build();
         }
 
+        System.out.println(response);
+
         return ResponseEntity.ok().body(response);
     }
 

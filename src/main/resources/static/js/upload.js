@@ -73,16 +73,6 @@ function upload(targetCategory, targetId, field, binary, nestedReferenceId) {
     });
 }
 
-function download(targetCategory, targetId, field, nestedReferenceId) {
-
-    const formData = createForm(targetId, field, nestedReferenceId);
-
-    return fetch(`/download/${targetCategory}`, {
-        method: 'GET',
-        body: formData
-    });
-}
-
 
 function createForm(category, targetId, field, nestedReferenceId) {
     const formData = new FormData();
@@ -105,22 +95,24 @@ function apply(element) {
     const nestedReferenceId = element.getAttribute('data-nested-reference-id');
     const defaultImage = element.getAttribute('data-default-image');
 
-    download(targetCategory, targetId, field, nestedReferenceId)
+    fetch("/download?targetCategory=" + targetCategory + "&targetId=" + targetId + "&field=" + field + "&nestedReferenceId=" + nestedReferenceId)
         .then(response => {
             console.log(response);
-        })
-        .then(data => {
-            console.log(data);
 
-            const binary = data.binary;
-            const base64 = decodeBase64(binary);
+            // Read message
+            response.body.getReader().read().then(({ value }) => {
+                const message = new TextDecoder().decode(value);
 
-            element.style.backgroundImage = `url(${base64})`;
+                const base64 = decodeBase64(message.split(',')[1]);
 
-            console.log('Image downloaded');
-            console.log(base64);
+                element.style.backgroundImage = `url(${base64})`;
 
-        }).catch(() => {
+                console.log('Image downloaded');
+                console.log(base64);
+            });
+        }).catch((ex) => {
+            console.log(ex)
+
             element.style.backgroundImage = `url(${defaultImage})`;
 
             console.log('Image not found');
