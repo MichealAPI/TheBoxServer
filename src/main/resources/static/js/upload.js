@@ -43,7 +43,7 @@ uploadAreas.forEach(uploadArea => {
         }
 
         // Check if the file is too big
-        if (file.size > 10000000) { // 10MB
+        if (file.size > 2000000) { // 2MB
             uploadArea.classList.add('invalid');
             return;
         }
