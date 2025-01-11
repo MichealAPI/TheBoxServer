@@ -17,6 +17,10 @@ document.getElementById("saveSettingsBtn").addEventListener("click", function(e)
 
         let inputElement = setting.querySelector(".content input");
 
+        if(inputElement === null) {
+            return;
+        }
+
         settingsObj[settingName] = settingDataType === "boolean" ? inputElement.checked.toString() : inputElement.value.toString();
 
     });

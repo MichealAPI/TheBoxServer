@@ -66,49 +66,48 @@
                             <div class="card-wrapper">
 
                                 <div class="item classroom-card" th:each="course : ${courses}">
+                                    <a class="text-decoration-none order-1" href="#" th:href="@{/overview(courseId=${course.getId()})}">
+                                        <div class="content">
+                                            <div class="header">
+                                                <h1 class="phantom-bold" th:text="${course.getTitle()}">Your Course Name</h1>
+                                            </div>
 
-                                    <div class="content order-1">
-                                        <div class="header">
-                                            <h1 class="phantom-bold" th:text="${course.getTitle()}">Your Course Name</h1>
-                                        </div>
-
-                                        <div class="sub-header">
-                                            <p class="phantom-regular" th:text="${course.getOwnerUsername()}">
-                                                Course Owner
-                                            </p>
-                                        </div>
-
-                                        <div class="description">
-                                            <p class="phantom-regular" th:text="${course.getDescription()}">Course description</p>
-                                        </div>
-
-                                        <div class="footer">
-                                            <div class="date">
-                                                <p class="phantom-bold" th:text="${course.formattedTimestamp()}">
-                                                    12.12.2024
+                                            <div class="sub-header">
+                                                <p class="phantom-regular" th:text="${course.getOwnerUsername()}">
+                                                    Course Owner
                                                 </p>
                                             </div>
 
-                                            <div class="d-flex align-items-center">
-                                                <div class="statistic">
-                                                    <div class="text">
-                                                        <p class="phantom-bold" th:text="${course.getMembers().size()}">Number of Members</p>
-                                                    </div>
-                                                    <div class="icon">
-                                                        <i class="bi bi-people-fill"></i>
-                                                    </div>
+                                            <div class="description">
+                                                <p class="phantom-regular" th:text="${course.getDescription()}">Course description</p>
+                                            </div>
+
+                                            <div class="footer">
+                                                <div class="date">
+                                                    <p class="phantom-bold" th:text="${course.formattedTimestamp()}">
+                                                        12.12.2024
+                                                    </p>
                                                 </div>
 
-                                                <div class="anchor">
-                                                    <a th:href="@{/overview(courseId=${course.getId()})}">
+                                                <div class="d-flex align-items-center">
+                                                    <div class="statistic">
+                                                        <div class="text">
+                                                            <p class="phantom-bold" th:text="${course.getMembers().size()}">Number of Members</p>
+                                                        </div>
+                                                        <div class="icon">
+                                                            <i class="bi bi-people-fill"></i>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="anchor">
                                                         <img th:src="@{/images/arrow-button.svg}" alt="arrow-next">
-                                                    </a>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </a>
 
-                                    <div class="flex-grow-1 upload-area bg-red"
+                                    <div class="flex-grow-1 upload-area"
                                          data-category="course"
                                          th:data-id="${course.getId()}"
                                          th:data-default-image="@{/images/banner.webp}"

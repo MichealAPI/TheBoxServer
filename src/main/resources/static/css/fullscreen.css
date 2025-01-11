@@ -16,11 +16,13 @@
 
 #fullscreen #fullscreen-image {
 
-    width: 1000px;
-    height: 1000px;
-
-    background-size: cover;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    background-size: contain;
     background-repeat: no-repeat;
+    background-position: center;
+
 }
 
 #fullscreen .actions-wrapper {

@@ -34,10 +34,9 @@
         <div class="banner upload-area d-flex flex-column" th:id="'idea-'+${idea.getId()}"
              data-category="idea"
              th:data-id="${course.getId()}"
-             th:data-default-image="@{/images/banner.webp}"
              data-field="banner-bg"
              th:data-nested-reference-id="${idea.getId()}"
-             th:style="'background-image: url(https://res.cloudinary.com/dzeah7jtd/image/upload/f_auto,q_auto/v1/' + ${idea.getSettings().get('banner-bg')} + ')'">
+             th:style="${idea.getSettings().get('banner-bg')} == null ? 'background-image: url(../images/banner.webp)' : 'background-image: url(https://res.cloudinary.com/dzeah7jtd/image/upload/f_auto,q_auto/v1/' + ${idea.getSettings().get('banner-bg')} + ')'">
 
             <div class="text-section order-1">
                 <div class="wrapper">
@@ -45,11 +44,11 @@
                     <div class="footer">
                         <div class="counter">
                             <div class="number">
-                                <p class="phantom-bold vote-count" th:text="${idea.calculateVotes()}">[Likes]</p>
+                                <p class="phantom-bold vote-count primary-color" th:text="${idea.calculateVotes()}">[Likes]</p>
                             </div>
 
                             <div class="icon">
-                                <i class="bi bi-lightbulb"></i>
+                                <i class="bi bi-lightbulb primary-color"></i>
                             </div>
                         </div>
 

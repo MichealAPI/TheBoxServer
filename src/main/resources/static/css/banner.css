@@ -51,16 +51,6 @@
     flex-direction: column;
 }
 
-.dark-mode .banner .counter .number p,
-.dark-mode .banner .counter .icon i {
-    color: rgba(var(--secondary));
-}
-
-.banner .counter .number p,
-.banner .counter .icon i {
-    color: var(--primary);
-}
-
 
 .banner .counter {
     display: flex;

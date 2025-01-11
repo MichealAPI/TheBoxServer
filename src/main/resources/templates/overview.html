@@ -18,16 +18,16 @@
 </head>
 
 <body class="bg-light-gray" th:classappend="${settings.get('DARK_MODE').toString()} == 'true' ? 'dark-mode' : ''">
-    
-    <div id="navbar" th:insert="fragments/navbar :: #navbar(userInitial=${userInitial}, settings=${settings})"></div>
-    <div id="sidebar" th:insert="fragments/sidebar :: #sidebar(userInitial=${userInitial}, firstName=${firstName}, settings=${settings}, lastName=${lastName}, username=${username})"></div>
 
-    <div class="container-fluid">
+<div id="navbar" th:insert="fragments/navbar :: #navbar(userInitial=${userInitial}, settings=${settings})"></div>
+<div id="sidebar" th:insert="fragments/sidebar :: #sidebar(userInitial=${userInitial}, firstName=${firstName}, settings=${settings}, lastName=${lastName}, username=${username})"></div>
 
-        <div class="row">
+<div class="container-fluid">
 
-            <div class="page-content-wrapper min-vh-100">
-                            <div class="col-md h-100">
+    <div class="row">
+
+        <div class="page-content-wrapper min-vh-100">
+            <div class="col-md h-100">
                 <div class="container-fluid h-100 d-flex flex-column">
                     <div class="row">
                         <div class="col-md-12">
@@ -37,7 +37,7 @@
                                     <i class="bi bi-arrow-left m-0 fs-4"></i>
                                 </a>
 
-                                <p class="phantom-bold m-0" th:text="${course.getTitle()}">
+                                <p class="phantom-bold m-0 fs-medium secondary-color" th:text="${course.getTitle()}">
                                     [Your Class]
                                 </p>
 
@@ -80,7 +80,7 @@
                             <div class="card-wrapper">
 
                                 <div class="item comment-card" th:id="'idea-'+${dto.getIdea().getId()}" th:each="dto : ${ideas}">
-                                    <div class="content">
+                                    <div class="content order-1">
                                         <div class="header">
                                             <h1 class="phantom-bold" th:text="${dto.getIdea().getName()}">Idea Name</h1>
                                         </div>
@@ -130,111 +130,120 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
 
+                                    <div class="upload-area flex-grow-1"
+                                         data-category="idea"
+                                         th:data-id="${course.getId()}"
+                                         data-field="banner-bg"
+                                         th:data-nested-reference-id="${dto.getIdea().getId()}"
+                                         th:style="${dto.getIdea().getSettings().get('banner-bg')} == null ? 'background-image: url(../images/banner.webp)' : 'background-image: url(https://res.cloudinary.com/dzeah7jtd/image/upload/f_auto,q_auto/v1/' + ${dto.getIdea().getSettings().get('banner-bg')} + ')'">
+                                        <div class="overlay" th:if="${username} == ${course.getOwnerUsername()}"></div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            </div>
-
-
         </div>
 
+
     </div>
 
-    <div class="position-fixed d-md-none d-block bottom-0 end-0 p-3">
-        <button type="button" class="rounded-circle toolbar-btn bg-primary outline-transparent" data-bs-toggle="modal" data-bs-target="#courseModal">
-            <i class="bi bi-plus fs-1"></i>
-        </button>
-    </div>
+</div>
 
-    <div class="modal fade" id="courseModal" tabindex="-1" aria-labelledby="courseModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content bg-light-gray">
-                <div class="modal-header">
-                    <h5 class="modal-title phantom-medium secondary-color" id="courseModalLabel">New Idea</h5>
-                    <button type="button" class="btn-close secondary-color" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form>
-                        <div class="mb-3">
-                            <label for="ideaName" class="col-form-label secondary-color phantom-medium">Name:</label>
-                            <input type="text" class="form-control" id="ideaName">
-                        </div>
-                        <div class="mb-3">
-                            <label for="ideaDetails" class="col-form-label secondary-color phantom-medium">Details:</label>
-                            <textarea class="form-control" id="ideaDetails"></textarea>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <div class="general-btn">
-                        <button type="button" class="rounded bg-red pt-2 pb-2 ps-3 pe-3 secondary-color phantom-medium" data-bs-dismiss="modal">Close</button>
-                    </div>
-                    <div class="general-btn">
-                        <button type="button" id="submitIdea" class="rounded bg-primary secondary-color pt-2 pb-2 ps-3 pe-3 phantom-medium" data-bs-dismiss="modal">Suggest</button>
-                    </div>
-                </div>
+<div class="position-fixed d-md-none d-block bottom-0 end-0 p-3">
+    <button type="button" class="rounded-circle toolbar-btn bg-primary outline-transparent" data-bs-toggle="modal" data-bs-target="#courseModal">
+        <i class="bi bi-plus fs-1"></i>
+    </button>
+</div>
+
+<div class="modal fade" id="courseModal" tabindex="-1" aria-labelledby="courseModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content bg-light-gray">
+            <div class="modal-header">
+                <h5 class="modal-title phantom-medium secondary-color" id="courseModalLabel">New Idea</h5>
+                <button type="button" class="btn-close secondary-color" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-        </div>
-    </div>
-
-
-    <div class="modal fade" id="inviteModal" th:if="${course.getOwnerUsername() == username}" th:data-course-id="${course.getId()}" tabindex="-1" aria-labelledby="inviteModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content bg-light-gray">
-                <div class="modal-header">
-                    <h5 class="modal-title secondary-color phantom-medium" id="inviteModalLabel">Invite</h5>
-                    <button type="button" class="btn-close secondary-color" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form>
-                        <div class="mb-3">
-                            <label for="targetEmail" class="col-form-label secondary-color phantom-medium">Who are you inviting?</label>
-                            <input type="email" class="form-control" id="targetEmail">
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <div class="general-btn">
-                        <button type="button" class="rounded bg-red pt-2 pb-2 ps-3 pe-3 secondary-color phantom-medium" data-bs-dismiss="modal">Close</button>
+            <div class="modal-body">
+                <form>
+                    <div class="mb-3">
+                        <label for="ideaName" class="col-form-label secondary-color phantom-medium">Name:</label>
+                        <input type="text" class="form-control" id="ideaName">
                     </div>
-                    <div class="general-btn">
-                        <button type="button" id="submitInvite" class="rounded bg-green secondary-color pt-2 pb-2 ps-3 pe-3 phantom-medium" data-bs-dismiss="modal">Invite</button>
+                    <div class="mb-3">
+                        <label for="ideaDetails" class="col-form-label secondary-color phantom-medium">Details:</label>
+                        <textarea class="form-control" id="ideaDetails"></textarea>
                     </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <div class="general-btn">
+                    <button type="button" class="rounded bg-red pt-2 pb-2 ps-3 pe-3 secondary-color phantom-medium" data-bs-dismiss="modal">Close</button>
+                </div>
+                <div class="general-btn">
+                    <button type="button" id="submitIdea" class="rounded bg-primary secondary-color pt-2 pb-2 ps-3 pe-3 phantom-medium" data-bs-dismiss="modal">Suggest</button>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    <div class="toast-container position-fixed bottom-0 end-0 p-3">
-        <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-            <div class="toast-header">
-                <div class="me-2">
-                    <div id="toastIconColor">
-                        <i id="toastIcon"></i>
-                    </div>
-                </div>
-                <strong class="me-auto" id="toastTitle"></strong>
-                <small id="toastSmallText"></small>
-                <button type="button" class="btn-close secondary-color" data-bs-dismiss="toast" aria-label="Close"></button>
+
+<div class="modal fade" id="inviteModal" th:if="${course.getOwnerUsername() == username}" th:data-course-id="${course.getId()}" tabindex="-1" aria-labelledby="inviteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content bg-light-gray">
+            <div class="modal-header">
+                <h5 class="modal-title secondary-color phantom-medium" id="inviteModalLabel">Invite</h5>
+                <button type="button" class="btn-close secondary-color" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="toast-body" id="toastBody">
+            <div class="modal-body">
+                <form>
+                    <div class="mb-3">
+                        <label for="targetEmail" class="col-form-label secondary-color phantom-medium">Who are you inviting?</label>
+                        <input type="email" class="form-control" id="targetEmail">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <div class="general-btn">
+                    <button type="button" class="rounded bg-red pt-2 pb-2 ps-3 pe-3 secondary-color phantom-medium" data-bs-dismiss="modal">Close</button>
+                </div>
+                <div class="general-btn">
+                    <button type="button" id="submitInvite" class="rounded bg-green secondary-color pt-2 pb-2 ps-3 pe-3 phantom-medium" data-bs-dismiss="modal">Invite</button>
+                </div>
             </div>
         </div>
     </div>
+</div>
 
-    <script th:src="@{/js/toast.js}"></script>
-    <script th:src="@{/js/idea.js}"></script>
-    <script th:src="@{/js/vote.js}"></script>
-    <script th:src="@{/js/invite.js}" th:if="${course.getOwnerUsername() == username}"></script>
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+            <div class="me-2">
+                <div id="toastIconColor">
+                    <i id="toastIcon"></i>
+                </div>
+            </div>
+            <strong class="me-auto" id="toastTitle"></strong>
+            <small id="toastSmallText"></small>
+            <button type="button" class="btn-close secondary-color" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body" id="toastBody">
+        </div>
+    </div>
+</div>
 
-    <script th:if="${param.join} == 'success'">
-        showToast('success', 'Joined Course', 'You have successfully joined the course.');
-    </script>
+<script th:src="@{/js/toast.js}"></script>
+<script th:src="@{/js/idea.js}"></script>
+<script th:src="@{/js/vote.js}"></script>
+<script th:src="@{/js/invite.js}" th:if="${course.getOwnerUsername() == username}"></script>
+<script th:src="@{/js/upload.js}"></script>
+
+<script th:if="${param.join} == 'success'">
+    showToast('success', 'Joined Course', 'You have successfully joined the course.');
+</script>
 
 </body>
 

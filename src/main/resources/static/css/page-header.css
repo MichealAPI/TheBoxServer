@@ -8,3 +8,11 @@
 .page-header a {
     display: inline-block;
 }
+
+@media (max-width: 768px) {
+    .page-header {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+}

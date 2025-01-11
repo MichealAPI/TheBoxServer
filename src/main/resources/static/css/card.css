@@ -23,7 +23,8 @@
 }
 
 
-.card-wrapper .item.classroom-card {
+.card-wrapper .item.classroom-card,
+.card-wrapper .item.comment-card {
     overflow: hidden;
 }
 
