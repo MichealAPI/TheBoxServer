@@ -26,9 +26,11 @@
     <div class="page-content-wrapper">
         
             <div class="page-header">
-                <a class="d-flex gap-2 align-items-center text-decoration-none" th:href="${referer}">
-                    <i class="bi bi-arrow-left"></i>
-                    <p class="phantom-bold">Settings</p>
+                <a class="text-decoration-none" th:href="${referer}">
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="bi bi-arrow-left"></i>
+                        <p class="phantom-bold">Settings</p>
+                    </div>
                 </a>
                 
             </div>
@@ -60,6 +62,9 @@
                              th:data-field="${settingEntry.getKey()}"
                              th:style="${user.getSettings().get(settingEntry.getKey())} == null ? 'background-image: url(../images/no-image-icon.png)' : 'background-image: url(https://res.cloudinary.com/dzeah7jtd/image/upload/f_auto,q_auto/v1/' + ${user.getSettings().get(settingEntry.getKey())} + ')'"
                              th:if="${settingEntry.getValue().getDataType() == 'image-picker'}">
+
+                            <div class="overlay"></div>
+
                         </div>
 
                     </div>

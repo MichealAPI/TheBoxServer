@@ -26,19 +26,20 @@
     <div class="page-content-wrapper">
 
         <div class="page-header">
-            <a th:href="'/overview?courseId='+ ${course.getId()}" class="d-flex gap-2 align-items-center text-decoration-none">
+            <a th:href="'/overview?courseId='+ ${course.getId()}" class="d-inline-block mt-4 text-decoration-none">
                 <i class="bi bi-arrow-left"></i>
             </a>
         </div>
 
-        <div class="banner upload-area" th:id="'idea-'+${idea.getId()}"
+        <div class="banner upload-area d-flex flex-column" th:id="'idea-'+${idea.getId()}"
              data-category="idea"
              th:data-id="${course.getId()}"
              th:data-default-image="@{/images/banner.webp}"
              data-field="banner-bg"
              th:data-nested-reference-id="${idea.getId()}"
              th:style="'background-image: url(https://res.cloudinary.com/dzeah7jtd/image/upload/f_auto,q_auto/v1/' + ${idea.getSettings().get('banner-bg')} + ')'">
-            <div class="text-section">
+
+            <div class="text-section order-1">
                 <div class="wrapper">
 
                     <div class="footer">

@@ -66,7 +66,8 @@
                             <div class="card-wrapper">
 
                                 <div class="item classroom-card" th:each="course : ${courses}">
-                                    <div class="content">
+
+                                    <div class="content order-1">
                                         <div class="header">
                                             <h1 class="phantom-bold" th:text="${course.getTitle()}">Your Course Name</h1>
                                         </div>
@@ -105,6 +106,16 @@
                                                 </div>
                                             </div>
                                         </div>
+                                    </div>
+
+                                    <div class="flex-grow-1 upload-area bg-red"
+                                         data-category="course"
+                                         th:data-id="${course.getId()}"
+                                         th:data-default-image="@{/images/banner.webp}"
+                                         data-field="course_bg"
+                                         th:data-nested-reference-id="${username}"
+                                         th:style="${course.getSettings().get('course_bg')} == null ? 'background-image: url(../images/banner.webp)' : 'background-image: url(https://res.cloudinary.com/dzeah7jtd/image/upload/f_auto,q_auto/v1/' + ${course.getSettings().get('course_bg')} + ')'">
+                                        <div class="overlay" th:if="${username} == ${course.getOwnerUsername()}"></div>
                                     </div>
                                 </div>
                             </div>
@@ -176,7 +187,7 @@
 
     <script th:src="@{/js/toast.js}"></script>
     <script th:src="@{/js/course.js}"></script>
-    <!--<script th:src="@{/js/components.js}"></script>-->
+    <script th:src="@{/js/upload.js}"></script>
 
 </body>
 

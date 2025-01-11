@@ -1,4 +1,5 @@
 const uploadAreas = document.querySelectorAll('.upload-area');
+const overlay = document.querySelectorAll('.overlay');
 
 uploadAreas.forEach(uploadArea => {
 
@@ -58,7 +59,9 @@ uploadAreas.forEach(uploadArea => {
         }
 
         // Show loader animation while uploading
+        uploadArea.classList.add('d-flex');
         uploadArea.classList.add('align-items-center');
+        uploadArea.classList.add('justify-content-center');
         uploadArea.innerHTML = `<div class="spinner-border green-color" role="status">
                                     <span class="visually-hidden">Loading...</span>
                                 </div>`
@@ -93,6 +96,29 @@ function upload(targetCategory, targetId, field, file, nestedReferenceId) {
     });
 }
 
+if (overlay) {
+    overlay.forEach(overlay => {
+        overlay.addEventListener('click', () => {
+            const fileInput = document.createElement('input');
+            fileInput.type = 'file';
+            fileInput.accept = 'image/*';
+            fileInput.style.display = 'none';
 
+            fileInput.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    const event = new DragEvent('drop', {
+                        dataTransfer: new DataTransfer()
+                    });
+                    event.dataTransfer.items.add(file);
+                    //.dispatchEvent(event);
+                    overlay.parentElement.dispatchEvent(event);
+                }
+            });
 
-
+            document.body.appendChild(fileInput);
+            fileInput.click();
+            document.body.removeChild(fileInput);
+        });
+    });
+}

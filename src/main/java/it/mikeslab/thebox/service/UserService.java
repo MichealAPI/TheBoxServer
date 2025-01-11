@@ -5,6 +5,8 @@ import it.mikeslab.thebox.exception.EmailAlreadyUsedException;
 import it.mikeslab.thebox.exception.UsernameAlreadyUsedException;
 import it.mikeslab.thebox.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -44,6 +46,18 @@ public class UserService implements UserDetailsService {
             throw new UsernameNotFoundException("No user found for '"+ email + "'.");
         }
         return user;
+    }
+
+    public User getAuthenticatedUser() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        Object objUser = (auth != null) ? auth.getPrincipal() :  null;
+
+        if (objUser instanceof User user) {
+            return user;
+        }
+
+        return null;
     }
 
     public User getUserByUsername(String username) {

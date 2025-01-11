@@ -4,3 +4,7 @@
     margin-top: 25px;
     margin-bottom: 48px;
 }
+
+.page-header a {
+    display: inline-block;
+}

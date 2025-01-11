@@ -8,6 +8,7 @@ import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -37,6 +38,13 @@ public class Course {
 
     public String formattedTimestamp() {
         return StringUtil.formatTimestamp(timestamp);
+    }
+
+    public Map<String, String> getSettings() {
+        if (settings == null) {
+            settings = new HashMap<>();
+        }
+        return settings;
     }
 
 }
