@@ -43,6 +43,11 @@ public class SettingsController {
                 request.getHeader("Referer")
         );
 
+        model.addAttribute(
+                "user",
+                user
+        );
+
         // Add user initial
         model.addAttribute("userInitial", user.getUsername().charAt(0));
 

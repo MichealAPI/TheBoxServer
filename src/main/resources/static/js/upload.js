@@ -2,12 +2,30 @@ const uploadAreas = document.querySelectorAll('.upload-area');
 
 uploadAreas.forEach(uploadArea => {
 
-    apply(uploadArea);
-
     uploadArea.addEventListener('dragover', (e) => {
         e.preventDefault();
         uploadArea.classList.add('active');
     });
+
+    uploadArea.addEventListener('dragleave', (e) => {
+        e.preventDefault();
+        uploadArea.classList.remove('active');
+        uploadArea.classList.remove('invalid');
+    });
+
+    uploadArea.addEventListener('drop', (e) => {
+
+        e.preventDefault();
+
+        if(uploadArea.hasAttribute('uploading')) {
+            return;
+        }
+
+        setTimeout(() => {
+            uploadArea.classList.remove('active');
+            uploadArea.classList.remove('invalid');
+        }, 400);
+    })
 
     uploadArea.addEventListener('drop', (e) => {
         e.preventDefault();
@@ -20,49 +38,51 @@ uploadAreas.forEach(uploadArea => {
             uploadArea.classList.add('active');
         } else {
             uploadArea.classList.add('invalid');
+            return;
         }
 
         // Check if the file is too big
         if (file.size > 10000000) { // 10MB
             uploadArea.classList.add('invalid');
+            return;
         }
 
-        // Transform into a binary string
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
+        // Get category from attributes
+        const targetCategory = uploadArea.getAttribute('data-category');
+        const targetId = uploadArea.getAttribute('data-id');
+        const field = uploadArea.getAttribute('data-field');
+        let nestedReferenceId = null;
 
-        reader.onload = () => {
-            const binary = reader.result;
+        if(uploadArea.hasAttribute('data-nested-reference-id')) {
+            nestedReferenceId = uploadArea.getAttribute('data-nested-reference-id');
+        }
 
-            // Get category from attributes
-            const targetCategory = uploadArea.getAttribute('data-category');
-            const targetId = uploadArea.getAttribute('data-id');
-            const field = uploadArea.getAttribute('data-field');
-            let nestedReferenceId = null;
+        // Show loader animation while uploading
+        uploadArea.classList.add('align-items-center');
+        uploadArea.innerHTML = `<div class="spinner-border green-color" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>`
 
-            if(uploadArea.hasAttribute('data-nested-reference-id')) {
-                nestedReferenceId = uploadArea.getAttribute('data-nested-reference-id');
-            }
+        uploadArea.setAttribute("uploading", "true");
 
-            // Upload the image
-            upload(
-                targetCategory,
-                targetId,
-                field,
-                binary,
-                nestedReferenceId
-            );
-        };
+        // Upload the image
+        upload(
+            targetCategory,
+            targetId,
+            field,
+            file,
+            nestedReferenceId
+        ).then(() => location.reload());
 
     });
 
 });
 
-function upload(targetCategory, targetId, field, binary, nestedReferenceId) {
+function upload(targetCategory, targetId, field, file, nestedReferenceId) {
     const formData = new FormData();
     formData.append('targetId', targetId);
     formData.append('field', field);
-    formData.append('binary', binary);
+    formData.append('file', file);
     if (nestedReferenceId != null) {
         formData.append('nestedReferenceId', nestedReferenceId);
     }
@@ -74,54 +94,5 @@ function upload(targetCategory, targetId, field, binary, nestedReferenceId) {
 }
 
 
-function createForm(category, targetId, field, nestedReferenceId) {
-    const formData = new FormData();
-    formData.append("category", category)
-    formData.append('targetId', targetId);
-    formData.append('field', field);
-    if (nestedReferenceId != null) {
-        formData.append('nestedReferenceId', nestedReferenceId);
-    }
 
-    return formData;
-}
-
-
-function apply(element) {
-
-    const targetCategory = element.getAttribute('data-category');
-    const targetId = element.getAttribute('data-id');
-    const field = element.getAttribute('data-field');
-    const nestedReferenceId = element.getAttribute('data-nested-reference-id');
-    const defaultImage = element.getAttribute('data-default-image');
-
-    fetch("/download?targetCategory=" + targetCategory + "&targetId=" + targetId + "&field=" + field + "&nestedReferenceId=" + nestedReferenceId)
-        .then(response => {
-            console.log(response);
-
-            // Read message
-            response.body.getReader().read().then(({ value }) => {
-                const message = new TextDecoder().decode(value);
-
-                const base64 = decodeBase64(message.split(',')[1]);
-
-                element.style.backgroundImage = `url(${base64})`;
-
-                console.log('Image downloaded');
-                console.log(base64);
-            });
-        }).catch((ex) => {
-            console.log(ex)
-
-            element.style.backgroundImage = `url(${defaultImage})`;
-
-            console.log('Image not found');
-
-            console.log(defaultImage);
-        });
-}
-
-function decodeBase64(base64) {
-    return atob(base64);
-}
 

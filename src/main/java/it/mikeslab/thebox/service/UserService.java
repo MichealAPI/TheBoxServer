@@ -78,6 +78,10 @@ public class UserService implements UserDetailsService {
 
     }
 
+    public void updateUser(User user) {
+        userRepository.save(user);
+    }
+
     public void addVerification(User user, String verificationId) {
         user.setVerificationToken(verificationId);
         userRepository.save(user);

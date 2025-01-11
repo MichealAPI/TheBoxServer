@@ -1,12 +1,17 @@
 .upload-area.active {
-    border: 3px dashed var(--green);
-    background-color: var(--primary);
+    outline: 3px dashed var(--green);
+    background-image: url(../images/drag-and-drop.png) !important;
 
-    opacity: 0.9;
+    background-size: 100px;
+    background-repeat: no-repeat;
+    background-position: center;
+
+    /* Change background image opacity to .6 */
+    /*background-color: rgba(255, 255, 255, .6);*/
 }
 
 .upload-area.invalid {
-    border: 3px dashed var(--red);
+    outline: 3px dashed var(--red);
     background-color: var(--primary);
 
     opacity: 0.9;

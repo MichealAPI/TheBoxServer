@@ -1,24 +1,31 @@
 package it.mikeslab.thebox.rest;
 
+import com.cloudinary.Cloudinary;
+import it.mikeslab.thebox.service.CourseImageUploadService;
 import it.mikeslab.thebox.service.CourseService;
+import it.mikeslab.thebox.service.IdeaImageUploadService;
+import it.mikeslab.thebox.service.UserImageUploadService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.core.env.Environment;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Optional;
 
 @RestController
+@RequiredArgsConstructor
 public class ImageRestController {
 
     private final CourseService courseService;
-
-    public ImageRestController(CourseService courseService) {
-        this.courseService = courseService;
-    }
+    private final CourseImageUploadService courseImageUploadService;
+    private final IdeaImageUploadService ideaImageUploadService;
+    private final UserImageUploadService userImageUploadService;
 
     @PostMapping("/upload/{targetCategory}")
-    public ResponseEntity<String> upload(@PathVariable String targetCategory, @RequestParam String targetId, @RequestParam String field, @RequestParam String binary, @RequestParam(required = false) Optional<String> nestedReferenceId) {
+    public ResponseEntity<String> upload(@PathVariable String targetCategory, @RequestParam String targetId, @RequestParam String field, @RequestParam MultipartFile file, @RequestParam(required = false) Optional<String> nestedReferenceId) {
 
-        if (targetCategory == null || field == null || binary == null) {
+        if (targetCategory == null || field == null || file == null) {
             return ResponseEntity.badRequest().build();
         }
 
@@ -29,10 +36,11 @@ public class ImageRestController {
 
         switch (targetCategory) {
             case "course":
-                courseService.uploadFile(
+                courseImageUploadService.uploadAndSave(
                         targetId,
                         field,
-                        binary
+                        file,
+                        Optional.empty()
                 );
                 break;
             case "idea":
@@ -41,11 +49,21 @@ public class ImageRestController {
                     return ResponseEntity.badRequest().build();
                 }
 
-                courseService.uploadIdeaFile(
+                ideaImageUploadService.uploadAndSave(
                         targetId,
-                        nestedReferenceId.get(),
                         field,
-                        binary
+                        file,
+                        nestedReferenceId
+                );
+
+                break;
+            case "user":
+
+                userImageUploadService.uploadAndSave(
+                        targetId,
+                        field,
+                        file,
+                        Optional.empty()
                 );
 
                 break;
@@ -98,8 +116,6 @@ public class ImageRestController {
         if (response == null) {
             return ResponseEntity.badRequest().build();
         }
-
-        System.out.println(response);
 
         return ResponseEntity.ok().body(response);
     }

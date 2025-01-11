@@ -2,8 +2,8 @@ package it.mikeslab.thebox.service;
 
 import it.mikeslab.thebox.dto.IdeaDTO;
 import it.mikeslab.thebox.entity.Course;
-import it.mikeslab.thebox.pojo.Idea;
 import it.mikeslab.thebox.entity.User;
+import it.mikeslab.thebox.pojo.Idea;
 import it.mikeslab.thebox.repository.CourseRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -36,14 +36,6 @@ public class CourseService {
         }
     }
 
-    public void addMember(String courseId, String userId) {
-        Course course = fetchCourseById(courseId);
-        if (course != null) {
-            course.getMembers().add(userId);
-            courseRepository.save(course);
-        }
-    }
-
     public void addMember(Course course, String userId) {
         if (course != null) {
             course.getMembers().add(userId);
@@ -69,23 +61,6 @@ public class CourseService {
             return course.getIdeas().get(ideaId);
         }
         return null;
-    }
-
-    public Course getCourseByTitle(String title) {
-        return courseRepository.findByTitle(title);
-    }
-
-    public Course getCourseByAuthor(String username) {
-        return courseRepository.findByOwnerUsername(username);
-    }
-
-    public boolean deleteCourse(String id) {
-        Course course = fetchCourseById(id);
-        if (course != null) {
-            courseRepository.delete(course);
-            return true;
-        }
-        return false;
     }
 
 
@@ -114,29 +89,12 @@ public class CourseService {
         return course != null && course.getIdeas() != null;
     }
 
-    public void uploadFile(String referenceId, String field, String binaryData) {
-
-        Course course = fetchCourseById(referenceId);
-
-        if (course != null) {
-            course.getSettings().put(field, binaryData);
+    public void saveCourse(Course course) {
+        if (isValidCourse(course)) {
             courseRepository.save(course);
         }
-
     }
 
-    public void uploadIdeaFile(String courseId, String ideaId, String field, String binaryData) {
-
-        Course course = fetchCourseById(courseId);
-
-        if (course != null) {
-            Idea idea = course.getIdeas().get(ideaId);
-            if (idea != null) {
-                idea.getSettings().put(field, binaryData);
-                courseRepository.save(course);
-            }
-        }
-    }
 
 
     private IdeaDTO mapIdeaToDTO(Idea idea, String courseId) {

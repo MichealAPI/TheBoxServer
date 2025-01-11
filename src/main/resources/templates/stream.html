@@ -20,8 +20,8 @@
 
 <body class="bg-light-gray" th:classappend="${settings.get('DARK_MODE').toString()} == 'true' ? 'dark-mode' : ''">
 
-    <div id="navbar" th:insert="fragments/navbar :: #navbar(userInitial=${userInitial})"></div>
-    <div id="sidebar" th:insert="fragments/sidebar :: #sidebar(userInitial=${userInitial}, firstName=${firstName}, lastName=${lastName}, username=${username})"></div>
+    <div id="navbar" th:insert="fragments/navbar :: #navbar(userInitial=${userInitial}, settings=${settings})"></div>
+    <div id="sidebar" th:insert="fragments/sidebar :: #sidebar(userInitial=${userInitial}, settings=${settings}, firstName=${firstName}, lastName=${lastName}, username=${username})"></div>
 
     <div class="page-content-wrapper">
 
@@ -36,48 +36,57 @@
              th:data-id="${course.getId()}"
              th:data-default-image="@{/images/banner.webp}"
              data-field="banner-bg"
-             th:data-nested-reference-id="${idea.getId()}">
+             th:data-nested-reference-id="${idea.getId()}"
+             th:style="'background-image: url(https://res.cloudinary.com/dzeah7jtd/image/upload/f_auto,q_auto/v1/' + ${idea.getSettings().get('banner-bg')} + ')'">
+            <div class="text-section">
+                <div class="wrapper">
 
-            <div class="wrapper">
+                    <div class="footer">
+                        <div class="counter">
+                            <div class="number">
+                                <p class="phantom-bold vote-count" th:text="${idea.calculateVotes()}">[Likes]</p>
+                            </div>
 
-                <div class="header">
-                    <div class="title">
-                        <h1 class="phantom-bold" th:text="${idea.getName()}">[Idea Name]</h1>
+                            <div class="icon">
+                                <i class="bi bi-lightbulb"></i>
+                            </div>
+                        </div>
+
+                        <div class="actions-wrapper">
+
+                            <button class="outline-transparent bg-transparent" id="joinFullscreen" th:data-image="'https://res.cloudinary.com/dzeah7jtd/image/upload/f_auto,q_auto/v1/' + ${idea.getSettings().get('banner-bg')}">
+                                <i class="bi bi-arrows-fullscreen fs-medium primary-color"></i>
+                            </button>
+
+
+                            <div class="anchor">
+                                <a draggable="false" href="#" class="vote-btn" th:data-idea-id="${idea.getId()}" th:data-course-id="${course.getId()}" data-vote="up">
+                                    <img draggable="false" th:src="@{/images/like-btn-bg.svg}" alt="like-button">
+                                </a>
+                            </div>
+
+                            <div class="anchor">
+                                <a draggable="false" href="#" class="vote-btn" th:data-idea-id="${idea.getId()}" th:data-course-id="${course.getId()}" data-vote="down">
+                                    <img draggable="false" th:src="@{/images/dislike-btn-bg.svg}" alt="dislike-button">
+                                </a>
+                            </div>
+                        </div>
                     </div>
-                    <div class="subtitle">
-                        <p class="phantom-regular" th:text="'By #'+${idea.getAuthorUsername()}">[Idea Author]</p>
-                    </div>
-                </div>
-
-                <div class="footer">
-                    <div class="counter">
-                        <div class="number">
-                            <p class="phantom-bold vote-count" th:text="${idea.calculateVotes()}">[Likes]</p>
-                        </div>
-
-                        <div class="icon">
-                            <i class="bi bi-lightbulb"></i>
-                        </div>
-                    </div>
-
-                    <div class="actions-wrapper">
-                        <div class="anchor">
-                            <a draggable="false" href="#" class="vote-btn" th:data-idea-id="${idea.getId()}" th:data-course-id="${course.getId()}" data-vote="up">
-                                <img draggable="false" th:src="@{/images/like-btn-bg.svg}" alt="like-button">
-                            </a>
-                        </div>
-        
-                        <div class="anchor">
-                            <a draggable="false" href="#" class="vote-btn" th:data-idea-id="${idea.getId()}" th:data-course-id="${course.getId()}" data-vote="down">
-                                <img draggable="false" th:src="@{/images/dislike-btn-bg.svg}" alt="dislike-button">
-                            </a>
-                        </div>
-                    </div>    
                 </div>
             </div>
         </div>
 
         <div class="idea">
+
+            <div class="header">
+                <div class="title">
+                    <h1 class="phantom-bold" th:text="${idea.getName()}">[Idea Name]</h1>
+                </div>
+                <div class="subtitle">
+                    <p class="phantom-regular" th:text="'By #'+${idea.getAuthorUsername()}">[Idea Author]</p>
+                </div>
+            </div>
+
             <div class="description">
                 <div class="section-title">
                     <p class="phantom-regular">DETAILS</p>
@@ -111,7 +120,6 @@
                     <button type="button" class="outline-transparent bg-transparent" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="The anonymizer rewrites comments neutrally and hides the profile picture and username using AI">
                         <i class="bi bi-info-circle fs-medium secondary-color"></i>
                     </button>
-
 
                 </div>
 
@@ -179,13 +187,28 @@
         </div>
     </div>
 
+    <div id="fullscreen" class="d-none">
+
+        <div id="fullscreen-image"></div>
+
+        <div class="actions-wrapper">
+            <button class="outline-transparent bg-transparent" id="exitFullscreen">
+                <div class="icon">
+                    <i class="bi bi-x fs-large"></i>
+                </div>
+            </button>
+        </div>
+
+    </div>
+
     <script th:src="@{/js/toast.js}"></script>
     <script th:src="@{/js/components.js}"></script>
     <script th:src="@{/js/vote.js}"></script>
     <script th:src="@{/js/comment.js}"></script>
     <script th:src="@{/js/anonymizer.js}"></script>
     <script th:src="@{/js/tooltip.js}"></script>
-    <script th:src="@{/js/upload.js}"></script>
+    <script th:src="@{/js/upload.js}" th:if="${idea.getAuthorUsername()} == ${username}"></script>
+    <script th:src="@{/js/fullscreen.js}"></script>
 
 </body>
 

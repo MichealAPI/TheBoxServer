@@ -18,11 +18,10 @@
             <div class="divider"></div>
             
             <div class="account">
-                <div class="avatar bg-blue" id="avatar">
-                    <!-- Todo: add image -->
+                <div class="avatar" th:style="${settings.get('PROFILE_PICTURE')} == null ? '' : 'background-image: url(https://res.cloudinary.com/dzeah7jtd/image/upload/f_auto,q_auto/v1/' + ${settings.get('PROFILE_PICTURE')}">
 
-                    <div class="letter">
-                        <p class="phantom-bold" th:text="${userInitial}">Username Initial</p>
+                    <div class="letter" th:if="${settings.get('PROFILE_PICTURE')} == null">
+                        <p class="phantom-bold">M</p>
                     </div>
 
                 </div>

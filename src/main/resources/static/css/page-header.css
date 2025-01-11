@@ -1,4 +1,4 @@
-.page-header i,p {
+.page-header i, .page-header p {
     color: rgba(var(--secondary));
     font-size: 24px;
     margin-top: 25px;

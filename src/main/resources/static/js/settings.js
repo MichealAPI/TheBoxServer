@@ -54,7 +54,7 @@ function retrieveSettings() {
 
                 if (settingDataType === "boolean") {
                     inputElement.checked = data[settingName] === "true";
-                } else {
+                } else if(settingDataType === "string") {
                     inputElement.value = data[settingName];
                 }
 

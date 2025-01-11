@@ -56,10 +56,9 @@
         <!-- Profile icon -->
         <nav class="navbar navbar-dark bg-navbar">
             <div class="container-fluid d-flex">
-                <div class="avatar bg-blue">
-                    <!-- Todo: add image -->
+                <div class="avatar" th:style="${settings.get('PROFILE_PICTURE')} == null ? '' : 'background-image: url(https://res.cloudinary.com/dzeah7jtd/image/upload/f_auto,q_auto/v1/' + ${settings.get('PROFILE_PICTURE')}">
 
-                    <div class="letter">
+                    <div class="letter" th:if="${settings.get('PROFILE_PICTURE')} == null">
                         <p class="phantom-bold">M</p>
                     </div>
 

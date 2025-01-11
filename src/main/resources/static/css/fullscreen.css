@@ -1,0 +1,67 @@
+#fullscreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    background-color: rgba(0, 0, 0, .5);
+    color: #fff;
+    text-align: center;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#fullscreen #fullscreen-image {
+
+    width: 1000px;
+    height: 1000px;
+
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+#fullscreen .actions-wrapper {
+    position: absolute;
+
+    display: flex;
+    justify-content: center;
+
+    top: 20px;
+    right: 20px;
+
+}
+
+#joinFullscreen {
+    transition-property: opacity;
+    transition-duration: .2s;
+}
+
+#joinFullscreen:hover {
+    opacity: .8;
+    transition-property: opacity;
+    transition-duration: .2s;
+}
+
+#fullscreen .actions-wrapper button {
+    padding: 10px 20px;
+    border-radius: 5px;
+    color: var(--primary);
+    border: none;
+    cursor: pointer;
+
+    transition-property: opacity;
+    transition-duration: .2s;
+}
+
+#fullscreen .actions-wrapper button .icon i {
+    font-size: 34px;
+}
+
+#fullscreen .actions-wrapper button:hover {
+    opacity: .8;
+    transition-property: opacity;
+    transition-duration: .2s;
+}
