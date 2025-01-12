@@ -38,6 +38,8 @@ postBtn.addEventListener('click', async (e) => { // Make the listener function `
 
         username = 'Anonymous';
         content = await performAnonymization(content); // Await the result here
+
+        console.log(content);
     }
 
     const payload = {
@@ -92,15 +94,11 @@ function performAnonymization(text) {
     anonymousSwitcher.disabled = true
 
     return anonymize(text)
-        .then((response) => {
-            postBtn.disabled = false;
-            anonymousSwitcher.disabled = false
-            console.log(response)
-            return response.response; // Return anonymized text
+        .then((message) => {
+            console.log(message)
+            return message;
         })
         .catch((error) => {
-            postBtn.disabled = false;
-            anonymousSwitcher.disabled = false
             console.error('Error during anonymization:', error);
             showToast(
                 "Error",
@@ -111,5 +109,10 @@ function performAnonymization(text) {
                 "Anonymization failed!"
             );
             return text; // Return original text if anonymization fails
-        });
+        }).finally(
+            () => {
+                postBtn.disabled = false;
+                anonymousSwitcher.disabled = false
+            }
+        )
 }

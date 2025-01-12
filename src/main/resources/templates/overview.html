@@ -19,8 +19,8 @@
 
 <body class="bg-light-gray" th:classappend="${settings.get('DARK_MODE').toString()} == 'true' ? 'dark-mode' : ''">
 
-<div id="navbar" th:insert="fragments/navbar :: #navbar(userInitial=${userInitial}, settings=${settings})"></div>
-<div id="sidebar" th:insert="fragments/sidebar :: #sidebar(userInitial=${userInitial}, firstName=${firstName}, settings=${settings}, lastName=${lastName}, username=${username})"></div>
+<div id="navbar" th:insert="~{fragments/navbar :: #navbar(userInitial=${userInitial}, settings=${settings})}"></div>
+<div id="sidebar" th:insert="~{fragments/sidebar :: #sidebar(userInitial=${userInitial}, settings=${settings}, firstName=${firstName}, lastName=${lastName}, username=${username})}"></div>
 
 <div class="container-fluid">
 

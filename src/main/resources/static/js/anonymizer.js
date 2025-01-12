@@ -19,23 +19,26 @@ function isAnonymous() {
 
 async function anonymize(text) {
     try {
-        const response = await fetch('http://localhost:11434/api/generate', {
+        const response = await fetch('/anonymize', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+                'Content-Type': 'application/json'
+            },
             body: JSON.stringify({
-                model: "llama3.2",
-                prompt: "Make this text anonymous by removing all personal or specific details. Rewrite it naturally as if someone is speaking directly, without adding quotation marks or unnecessary formatting. Provide only the revised text: " + text,
-                stream: false
+                comment: text
             })
         });
 
+        const { value } = await response.body.getReader().read();
+        const message = new TextDecoder().decode(value);
+
         if (!response.ok) {
-            const { value } = await response.body.getReader().read();
-            const message = new TextDecoder().decode(value);
             throw new Error(message);
         }
 
-        return await response.json();
+        console.log(message);
+
+        return message;
     } catch (error) {
         console.error('Error during anonymization:', error);
         throw error; // Re-throw the error to let the caller handle it
