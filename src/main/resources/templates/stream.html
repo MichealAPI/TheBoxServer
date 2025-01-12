@@ -36,7 +36,7 @@
              th:data-id="${course.getId()}"
              data-field="banner-bg"
              th:data-nested-reference-id="${idea.getId()}"
-             th:style="${idea.getSettings().get('banner-bg')} == null ? 'background-image: url(../images/banner.webp)' : 'background-image: url(https://res.cloudinary.com/dzeah7jtd/image/upload/f_auto,q_auto/v1/' + ${idea.getSettings().get('banner-bg')} + ')'">
+             th:style="${idea.getSettings().get('banner-bg')} == null ? 'background-image: url(https://res.cloudinary.com/dzeah7jtd/image/upload/f_auto,q_auto/v1/static/images/xc6piiilp4yzq2zdk6ip)' : 'background-image: url(https://res.cloudinary.com/dzeah7jtd/image/upload/f_auto,q_auto/v1/' + ${idea.getSettings().get('banner-bg')} + ')'">
 
             <div class="text-section order-1">
                 <div class="wrapper">
@@ -142,9 +142,12 @@
         <div class="comment-wrapper">
             <div class="comment" th:each="comment : ${idea.getComments().reversed()}">
 
-                <div class="avatar" th:classappend="${comment.getAuthor() == 'Anonymous' ? 'bg-black' : 'bg-blue'}">
-                    <div class="letter">
-                        <p class="phantom-medium m-0" th:text="${comment.getAuthor()} == 'Anonymous' ? '*' : ${comment.getAuthorInitial()}">[Author Initial]</p>
+                <div class="avatar"
+                     th:classappend="${comment.getProfilePicture() == null ? (comment.getAuthor() == 'Anonymous' ? 'bg-black' : 'bg-blue') : ''}"
+                     th:style="${comment.getProfilePicture() == null ? '' : 'background-image: url(https://res.cloudinary.com/dzeah7jtd/image/upload/f_auto,q_auto/v1/' + comment.getProfilePicture()}">
+
+                    <div class="letter" th:if="${comment.getProfilePicture() == null}">
+                        <p class="phantom-medium m-0" th:text="${comment.getAuthor() == 'Anonymous' ? '*' : comment.getAuthorInitial()}">[Author Initial]</p>
                     </div>
                 </div>
 

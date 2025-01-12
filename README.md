@@ -24,7 +24,7 @@ Use the following test credentials to explore the application:
     - Comments
 
 - **Commenting Options**:  
-  Comment publicly or anonymously on ideas. Anonymous comments are processed through **AI (Free & Open-source, see [Llama](https://www.llama.com/))** to ensure neutral and constructive formatting.
+  Comment publicly or anonymously on ideas. Anonymous comments are processed through **AI (for a Free & Open-source version, see [Llama](https://www.llama.com/))** to ensure neutral and constructive formatting.
 
 - **Email Verification & Course Invitations**:  
   During registration, emails are verified to prevent unauthorized access. Course invitations work via email: users receive a unique link that redirects to the login page and automatically adds them to the relevant course upon authentication.

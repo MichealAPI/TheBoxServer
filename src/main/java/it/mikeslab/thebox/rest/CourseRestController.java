@@ -2,15 +2,11 @@ package it.mikeslab.thebox.rest;
 
 import it.mikeslab.thebox.entity.Course;
 import it.mikeslab.thebox.entity.User;
-import it.mikeslab.thebox.helper.ValidationResult;
 import it.mikeslab.thebox.service.CourseService;
 import it.mikeslab.thebox.service.UserService;
-import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import org.bson.BsonDocument;
 import org.bson.conversions.Bson;
-import org.bson.types.ObjectId;
-import org.springframework.core.env.Environment;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -30,7 +26,7 @@ public class CourseRestController {
     // Secured endpoint to get all courses a user has joined
     @GetMapping("/joined/{userId}")
     public List<Course> getCoursesByMember(@PathVariable String userId) {
-        return courseService.getCoursesByMember(userId);
+        return courseService.fetchCoursesByMember(userId);
     }
 
     @PostMapping("/create")

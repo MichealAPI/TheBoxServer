@@ -1,12 +1,10 @@
 package it.mikeslab.thebox.rest;
 
-import com.cloudinary.Cloudinary;
 import it.mikeslab.thebox.service.CourseImageUploadService;
 import it.mikeslab.thebox.service.CourseService;
 import it.mikeslab.thebox.service.IdeaImageUploadService;
 import it.mikeslab.thebox.service.UserImageUploadService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.env.Environment;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;

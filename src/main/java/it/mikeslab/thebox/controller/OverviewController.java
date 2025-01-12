@@ -37,7 +37,7 @@ public class OverviewController {
         }
 
         model.addAttribute("course", course);
-        model.addAttribute("ideas", courseService.getAllIdeasWithAuthors(courseId));
+        model.addAttribute("ideas", courseService.getAllIdeasByCourseId(courseId));
 
         // Add settings
         model.addAttribute(

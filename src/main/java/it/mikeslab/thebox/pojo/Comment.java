@@ -13,6 +13,8 @@ public class Comment {
     private String ideaId;
     private long timestamp;
 
+    private String profilePicture;
+
     public String getAuthorInitial() {
         return author.substring(0, 1).toUpperCase();
     }
@@ -20,12 +22,5 @@ public class Comment {
     public String formattedTimestamp() {
         return StringUtil.formatTimeAgo(timestamp);
     }
-
-
-
-
-
-
-
 
 }

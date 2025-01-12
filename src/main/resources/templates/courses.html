@@ -113,7 +113,7 @@
                                          th:data-default-image="@{/images/banner.webp}"
                                          data-field="course_bg"
                                          th:data-nested-reference-id="${username}"
-                                         th:style="${course.getSettings().get('course_bg')} == null ? 'background-image: url(../images/banner.webp)' : 'background-image: url(https://res.cloudinary.com/dzeah7jtd/image/upload/f_auto,q_auto/v1/' + ${course.getSettings().get('course_bg')} + ')'">
+                                         th:style="${course.getSettings().get('course_bg')} == null ? 'background-image: url(https://res.cloudinary.com/dzeah7jtd/image/upload/f_auto,q_auto/v1/static/images/xc6piiilp4yzq2zdk6ip)' : 'background-image: url(https://res.cloudinary.com/dzeah7jtd/image/upload/f_auto,q_auto/v1/' + ${course.getSettings().get('course_bg')} + ')'">
                                         <div class="overlay" th:if="${username} == ${course.getOwnerUsername()}"></div>
                                     </div>
                                 </div>

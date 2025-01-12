@@ -38,10 +38,32 @@
     display: flex;
     flex-direction: column;
 
-    max-height: 240px;
+    height: 210px;
+
+    vertical-align: middle;
 
     padding: 0 20px 20px 20px;
+
+    transition: height 0.3s;
+
+    /* Top box shadow */
+    box-shadow: 0 1px 8px 0 rgba(0, 0, 0, 0.25);
 }
+
+.card-wrapper .item a:hover .content {
+    height: 260px;
+    transition: height 0.3s;
+}
+
+.card-wrapper .item .upload-area {
+    transition: filter 0.3s;
+}
+
+.card-wrapper .item:hover .upload-area {
+    filter: brightness(85%);
+    transition: filter 0.3s;
+}
+
 
 .card-wrapper .item .content .header h1 {
     color: rgba(var(--secondary));

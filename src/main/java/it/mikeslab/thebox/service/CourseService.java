@@ -6,6 +6,8 @@ import it.mikeslab.thebox.entity.User;
 import it.mikeslab.thebox.pojo.Idea;
 import it.mikeslab.thebox.repository.CourseRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -17,6 +19,7 @@ public class CourseService {
 
     private final CourseRepository courseRepository;
     private final UserService userService;
+    private final CacheManager cacheManager;
 
     public Course createCourse(Course course) {
         return courseRepository.save(course);
@@ -49,12 +52,21 @@ public class CourseService {
 
         if (course != null && course.getIdeas() != null) {
             course.getIdeas().put(idea.getId(), idea);
+
+            // Invalidate cache
+            if(cacheManager.getCacheNames().contains("ideas")) {
+                cacheManager
+                        .getCache("ideas")
+                        .evictIfPresent(courseId);
+            }
+
             courseRepository.save(course);
             return true;
         }
         return false;
     }
 
+    @Cacheable(value = "ideas", key = "#ideaId")
     public Idea getIdea(String ideaId, String courseId) {
         Course course = fetchCourseById(courseId);
         if (course != null) {
@@ -64,7 +76,7 @@ public class CourseService {
     }
 
 
-    public List<IdeaDTO> getAllIdeasWithAuthors(String courseId) {
+    public List<IdeaDTO> getAllIdeasByCourseId(String courseId) {
         Course course = fetchCourseById(courseId);
         if (course == null) {
             return new ArrayList<>();
@@ -76,11 +88,11 @@ public class CourseService {
     }
 
 
-    public List<Course> getCoursesByMember(String username) {
+    public List<Course> fetchCoursesByMember(String username) {
         return courseRepository.findCoursesByMembersContaining(username);
     }
 
-
+    @Cacheable(value = "courses", key = "#courseId")
     public Course fetchCourseById(String courseId) {
         return courseRepository.findById(courseId).orElse(null);
     }
@@ -91,10 +103,17 @@ public class CourseService {
 
     public void saveCourse(Course course) {
         if (isValidCourse(course)) {
+
+            // Invalidate cache
+            if(cacheManager.getCacheNames().contains("courses")) {
+                cacheManager
+                        .getCache("courses")
+                        .evictIfPresent(course.getId());
+            }
+
             courseRepository.save(course);
         }
     }
-
 
 
     private IdeaDTO mapIdeaToDTO(Idea idea, String courseId) {

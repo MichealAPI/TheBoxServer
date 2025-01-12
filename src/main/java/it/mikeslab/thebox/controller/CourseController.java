@@ -3,7 +3,6 @@ package it.mikeslab.thebox.controller;
 import it.mikeslab.thebox.entity.Course;
 import it.mikeslab.thebox.entity.User;
 import it.mikeslab.thebox.service.CourseService;
-import it.mikeslab.thebox.service.SettingsService;
 import it.mikeslab.thebox.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -29,7 +28,7 @@ public class CourseController {
         // Get updated user instance
         user = userService.getUserByUsername(user.getUsername());
 
-        List<Course> courses = courseService.getCoursesByMember(user.getUsername());
+        List<Course> courses = courseService.fetchCoursesByMember(user.getUsername());
         model.addAttribute("courses", courses);
         model.addAttribute("userInitial", user.getUsername().charAt(0));
 
