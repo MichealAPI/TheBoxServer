@@ -19,8 +19,8 @@
 
 <body class="bg-light-gray" th:classappend="${settings.get('DARK_MODE').toString()} == 'true' ? 'dark-mode' : ''">
 
-    <div id="navbar" th:insert="~{fragments/navbar :: #navbar(userInitial=${userInitial}, settings=${settings})}"></div>
-    <div id="sidebar" th:insert="~{fragments/sidebar :: #sidebar(userInitial=${userInitial}, settings=${settings}, firstName=${firstName}, lastName=${lastName}, username=${username})}"></div>
+    <div id="navbar" th:insert="~{fragments/navbar :: #navbar(userInitial=${userInitial}, settings=${user.getSettings()})}"></div>
+    <div id="sidebar" th:insert="~{fragments/sidebar :: #sidebar(userInitial=${userInitial}, settings=${user.getSettings()}, firstName=${firstName}, lastName=${lastName}, username=${username})}"></div>
 
 
     <div class="page-content-wrapper">
@@ -60,7 +60,7 @@
                              th:data-id="${username}"
                              th:data-default-image="@{/images/no-image-icon.png}"
                              th:data-field="${settingEntry.getKey()}"
-                             th:style="${user.getSettings().get(settingEntry.getKey())} == null ? 'background-image: url(../images/no-image-icon.png)' : 'background-image: url(https://res.cloudinary.com/dzeah7jtd/image/upload/f_auto,q_auto/v1/' + ${user.getSettings().get(settingEntry.getKey())} + ')'"
+                             th:style="${user.getSettings().getOrDefault(settingEntry.getKey(), null)} == null ? 'background-image: url(../images/no-image-icon.png)' : 'background-image: url(https://res.cloudinary.com/dzeah7jtd/image/upload/f_auto,q_auto/v1/' + ${user.getSettings().get(settingEntry.getKey())} + ')'"
                              th:if="${settingEntry.getValue().getDataType() == 'image-picker'}">
 
                             <div class="overlay"></div>

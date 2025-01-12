@@ -34,6 +34,8 @@ public class CourseController {
 
         model.addAllAttributes(user.toMap());
 
+        model.addAttribute("user", user);
+
         // Add settings
         model.addAttribute(
                 "settings",

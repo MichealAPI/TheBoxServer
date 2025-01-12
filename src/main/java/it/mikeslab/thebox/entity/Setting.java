@@ -24,7 +24,7 @@ public class Setting {
     private static Map<String, Setting> getDefaultSettings() {
         return Map.of(
             "DARK_MODE", new Setting("Dark Mode", "Toggle dark mode", "boolean", "false"),
-            "PROFILE_PICTURE", new Setting("Profile Picture", "Your profile picture", "image-picker", "none")
+            "PROFILE_PICTURE", new Setting("Profile Picture", "Your profile picture", "image-picker", null)
         );
     }
 

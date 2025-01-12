@@ -18,10 +18,10 @@
             <div class="divider"></div>
             
             <div class="account">
-                <div class="avatar" th:style="${settings.get('PROFILE_PICTURE')} == null ? '' : 'background-image: url(https://res.cloudinary.com/dzeah7jtd/image/upload/f_auto,q_auto/v1/' + ${settings.get('PROFILE_PICTURE')}">
+                <div class="avatar" th:style="${settings.getOrDefault('PROFILE_PICTURE', null)} == null ? 'background-color: rgba(var(--secondary))' : 'background-image: url(https://res.cloudinary.com/dzeah7jtd/image/upload/f_auto,q_auto/v1/' + ${settings.get('PROFILE_PICTURE')}">
 
-                    <div class="letter" th:if="${settings.get('PROFILE_PICTURE')} == null">
-                        <p class="phantom-bold">M</p>
+                    <div class="letter" th:if="${settings.getOrDefault('PROFILE_PICTURE', null)} == null">
+                        <p class="phantom-bold primary-color" th:text="${userInitial}"></p>
                     </div>
 
                 </div>

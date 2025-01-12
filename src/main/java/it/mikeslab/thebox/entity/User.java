@@ -52,6 +52,7 @@ public class User implements UserDetails {
 
         this.courses = new ArrayList<>();
         this.authorities = new ArrayList<>();
+        this.settings = new HashMap<>();
 
     }
 
