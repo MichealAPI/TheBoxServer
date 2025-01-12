@@ -1,18 +1,8 @@
 self.addEventListener('install', (event) => {
-    event.waitUntil(
-        caches.open('pwa-cache').then((cache) => {
-            return cache.addAll([
-                '/courses',
-                '/app.js'
-            ]);
-        })
-    );
+    console.log('Service Worker installed.');
 });
 
 self.addEventListener('fetch', (event) => {
-    event.respondWith(
-        caches.match(event.request).then((cachedResponse) => {
-            return cachedResponse || fetch(event.request);
-        })
-    );
+    // Simply fetch from the network
+    event.respondWith(fetch(event.request));
 });
