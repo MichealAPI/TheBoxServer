@@ -4,6 +4,8 @@ import it.mikeslab.thebox.util.StringUtil;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.Optional;
+
 @Data
 @Builder
 public class Comment {
@@ -13,7 +15,7 @@ public class Comment {
     private String ideaId;
     private long timestamp;
 
-    private String profilePicture;
+    private Optional<String> profilePicture;
 
     public String getAuthorInitial() {
         return author.substring(0, 1).toUpperCase();

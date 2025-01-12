@@ -11,6 +11,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.Optional;
+
 @Controller
 @RequiredArgsConstructor
 public class StreamController {
@@ -42,6 +44,7 @@ public class StreamController {
         model.addAttribute("userInitial", user.getUsername().charAt(0));
         model.addAttribute("course", course);
         model.addAttribute("settings", user.getParsedSettings());
+        model.addAttribute("user", user);
 
         // Fetch idea and handle profile pictures
         Idea idea = course.getIdeas().get(ideaId);
@@ -58,12 +61,12 @@ public class StreamController {
             String author = comment.getAuthor();
 
             if ("anonymous".equalsIgnoreCase(author)) {
-                comment.setProfilePicture(null);
+                comment.setProfilePicture(Optional.empty());
             } else {
                 User commentOwner = userService.getUserByUsername(author);
                 comment.setProfilePicture(commentOwner != null
-                        ? String.valueOf(commentOwner.getSettings().getOrDefault("PROFILE_PICTURE", null))
-                        : null);
+                        ? Optional.ofNullable((String) (commentOwner.getSettings().get("PROFILE_PICTURE")))
+                        : Optional.empty());
             }
         });
     }

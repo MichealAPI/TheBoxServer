@@ -143,11 +143,11 @@
             <div class="comment" th:each="comment : ${idea.getComments().reversed()}">
 
                 <div class="avatar"
-                     th:classappend="${comment.getProfilePicture() == null ? (comment.getAuthor() == 'Anonymous' ? 'bg-black' : 'bg-blue') : ''}"
-                     th:style="${comment.getProfilePicture() == null ? '' : 'background-image: url(https://res.cloudinary.com/dzeah7jtd/image/upload/f_auto,q_auto/v1/' + comment.getProfilePicture()}">
+                     th:classappend="${comment.getProfilePicture().isEmpty() ? (comment.getAuthor() == 'Anonymous' ? 'bg-black' : 'bg-blue') : ''}"
+                     th:style="${comment.getProfilePicture().isEmpty() ? 'background-color: rgba(var(--secondary))' : 'background-image: url(https://res.cloudinary.com/dzeah7jtd/image/upload/f_auto,q_auto/v1/' + comment.getProfilePicture().get()}">
 
-                    <div class="letter" th:if="${comment.getProfilePicture() == null}">
-                        <p class="phantom-medium m-0" th:text="${comment.getAuthor() == 'Anonymous' ? '*' : comment.getAuthorInitial()}">[Author Initial]</p>
+                    <div class="letter" th:if="${comment.getProfilePicture().isEmpty()}">
+                        <p class="phantom-medium primary-color m-0" th:text="${comment.getAuthor() == 'Anonymous' ? '*' : comment.getAuthorInitial().toLowerCase()}">[Author Initial]</p>
                     </div>
                 </div>
 
