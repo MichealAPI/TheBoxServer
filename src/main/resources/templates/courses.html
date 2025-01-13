@@ -20,8 +20,9 @@
 
 <body class="bg-light-gray" th:classappend="${settings.get('DARK_MODE').toString()} == 'true' ? 'dark-mode' : ''">
 
-    <div id="navbar" th:insert="~{fragments/navbar :: #navbar(userInitial=${userInitial}, settings=${user.getSettings()})}"></div>
-    <div id="sidebar" th:insert="~{fragments/sidebar :: #sidebar(userInitial=${userInitial}, settings=${user.getSettings()}, firstName=${firstName}, lastName=${lastName}, username=${username})}"></div>
+    <div id="navbar" th:replace="~{fragments/navbar :: #navbar(userInitial=${userInitial}, settings=${user.getSettings()})}"></div>
+    <div id="sidebar" th:replace="~{fragments/sidebar :: #sidebar(userInitial=${userInitial}, settings=${user.getSettings()}, firstName=${firstName}, lastName=${lastName}, username=${username})}"></div>
+    <div id="supportSection" th:replace="~{fragments/support :: #supportSection}"></div>
 
     <div class="container-fluid min-vh-100 flex-grow-1 d-flex flex-column" style="height: 100%">
 
@@ -192,6 +193,7 @@
     <script th:src="@{/js/upload.js}"></script>
     <script th:src="@{/service-worker.js}"></script>
     <script th:src="@{/js/app.js}"></script>
+    <script th:src="@{/js/support.js}"></script>
 
 </body>
 

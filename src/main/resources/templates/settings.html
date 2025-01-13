@@ -21,7 +21,7 @@
 
     <div id="navbar" th:insert="~{fragments/navbar :: #navbar(userInitial=${userInitial}, settings=${user.getSettings()})}"></div>
     <div id="sidebar" th:insert="~{fragments/sidebar :: #sidebar(userInitial=${userInitial}, settings=${user.getSettings()}, firstName=${firstName}, lastName=${lastName}, username=${username})}"></div>
-
+    <div id="supportSection" th:replace="~{fragments/support :: #supportSection}"></div>
 
     <div class="page-content-wrapper">
         
@@ -81,8 +81,27 @@
 
         </div>
 
+        <div class="toast-container position-fixed bottom-0 end-0 p-3">
+            <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-header">
+                    <div class="me-2">
+                        <div id="toastIconColor">
+                            <i id="toastIcon"></i>
+                        </div>
+                    </div>
+                    <strong class="me-auto" id="toastTitle"></strong>
+                    <small id="toastSmallText"></small>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-body" id="toastBody">
+                </div>
+            </div>
+        </div>
+
         <script th:src="@{/js/settings.js}"></script>
         <script th:src="@{/js/upload.js}"></script>
+        <script th:src="@{/js/support.js}"></script>
+        <script th:src="@{/js/toast.js}"></script>
 
 </body>
 

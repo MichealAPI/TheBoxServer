@@ -15,13 +15,13 @@
     <!-- Custom CSS -->
     <link rel="stylesheet" th:href="@{/css/stream.css}">
 
-    <link rel="preload" th:href="@{/images/banner.webp}" as="image">
 </head>
 
 <body class="bg-light-gray" th:classappend="${settings.get('DARK_MODE').toString()} == 'true' ? 'dark-mode' : ''">
 
-    <div id="navbar" th:insert="~{fragments/navbar :: #navbar(userInitial=${userInitial}, settings=${user.getSettings()})}"></div>
-    <div id="sidebar" th:insert="~{fragments/sidebar :: #sidebar(userInitial=${userInitial}, settings=${user.getSettings()}, firstName=${firstName}, lastName=${lastName}, username=${username})}"></div>
+    <div id="navbar" th:replace="~{fragments/navbar :: #navbar(userInitial=${userInitial}, settings=${user.getSettings()})}"></div>
+    <div id="sidebar" th:replace="~{fragments/sidebar :: #sidebar(userInitial=${userInitial}, settings=${user.getSettings()}, firstName=${firstName}, lastName=${lastName}, username=${username})}"></div>
+    <div id="supportSection" th:replace="~{fragments/support :: #supportSection}"></div>
 
     <div class="page-content-wrapper">
 
@@ -212,6 +212,7 @@
     <script th:src="@{/js/tooltip.js}"></script>
     <script th:src="@{/js/upload.js}" th:if="${idea.getAuthorUsername()} == ${username}"></script>
     <script th:src="@{/js/fullscreen.js}"></script>
+    <script th:src="@{/js/support.js}"></script>
 
 </body>
 

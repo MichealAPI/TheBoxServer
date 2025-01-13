@@ -17,6 +17,9 @@
 
 </head>
 <body>
+
+    <div id="supportSection" th:replace="~{fragments/support :: #supportSection}"></div>
+
     <div class="d-flex flex-column vh-100">
         <!-- Profile icon -->
         <nav class="navbar navbar-dark bg-navbar">
@@ -34,7 +37,7 @@
                 </div>
 
                 <div class="d-flex gap-3">
-                    <a th:href="@{/support}" class="text-decoration-none phantom-medium animated secondary-color">Support</a>
+                    <a href="#" class="support-btn text-decoration-none phantom-medium animated secondary-color">Support</a>
                     <a th:href="@{/}" class="text-decoration-none phantom-medium animated secondary-color">Homepage</a>
                     <a th:href="@{/discord}" class="text-decoration-none phantom-medium animated secondary-color">Discord</a>
                 </div>
@@ -161,6 +164,7 @@
     <script defer th:src="@{/js/input.js}"></script>
     <script th:src="@{/js/register.js}"></script>
     <script th:src="@{/js/toast.js}"></script>
+    <script th:src="@{/js/support.js}"></script>
 
 </body>
 </html>

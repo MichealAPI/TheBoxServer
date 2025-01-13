@@ -36,6 +36,10 @@
   --bs-tooltip-color: var(--primary);
 }
 
+.w-80 {
+    width: 80%;
+}
+
 
 
   .phantom-regular {

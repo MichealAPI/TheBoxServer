@@ -10,6 +10,10 @@
     background-size: cover;
 }
 
+.black-opacity-background {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
 /* Mobile */
 @media
     (max-width: 768px) {
