@@ -34,4 +34,8 @@ public class StringUtil {
         }
     }
 
+    public String valueOfNullable(Object value) {
+        return value == null ? null : value.toString();
+    }
+
 }

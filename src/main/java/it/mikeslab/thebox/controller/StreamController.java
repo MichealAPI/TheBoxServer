@@ -5,6 +5,7 @@ import it.mikeslab.thebox.entity.User;
 import it.mikeslab.thebox.pojo.Idea;
 import it.mikeslab.thebox.service.CourseService;
 import it.mikeslab.thebox.service.UserService;
+import it.mikeslab.thebox.util.StringUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -64,8 +65,11 @@ public class StreamController {
                 comment.setProfilePicture(Optional.empty());
             } else {
                 User commentOwner = userService.getUserByUsername(author);
-                comment.setProfilePicture(commentOwner != null
-                        ? Optional.ofNullable((String) (commentOwner.getSettings().get("PROFILE_PICTURE")))
+
+                boolean isOwnerAndSettingsNull = commentOwner == null || commentOwner.getSettings() == null;
+
+                comment.setProfilePicture(!isOwnerAndSettingsNull
+                        ? Optional.ofNullable(StringUtil.valueOfNullable(commentOwner.getSettings().get("PROFILE_PICTURE")))
                         : Optional.empty());
             }
         });

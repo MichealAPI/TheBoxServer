@@ -68,7 +68,7 @@
 
                                 <div class="item classroom-card" th:each="course : ${courses}">
                                     <a class="text-decoration-none order-1" href="#" th:href="@{/overview(courseId=${course.getId()})}">
-                                        <div class="content">
+                                        <div class="content animated">
                                             <div class="header">
                                                 <h1 class="phantom-bold" th:text="${course.getTitle()}">Your Course Name</h1>
                                             </div>
